@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Флешка · VALPOD</title>
+<meta name="description" content="Гайды, PDF, скиллы и сервисы VALPOD в одном месте">
+<meta property="og:title" content="Флешка · VALPOD">
+<meta property="og:description" content="Гайды, PDF, скиллы и сервисы, которыми пользуюсь сам">
+<style>html,body{margin:0;background:#000}</style>
+</head>
+<body>
+<!-- ФЛЕШКА · VALPOD · блок T123 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+#vpf{--c:#31F1FC;--t:#E8F4F5;--d:#9FB3B5;--m:#6E8A8D;--b:rgba(255,255,255,.1);
+ background:radial-gradient(110% 40% at 50% 105%,#0B2F55 0%,#061527 40%,transparent 75%),linear-gradient(165deg,#0A1A1E 0%,#030506 40%,#000 100%);
+ color:var(--t);font-family:Inter,Arial,sans-serif;min-height:100vh;padding:40px 20px 60px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+#vpf *{box-sizing:border-box;margin:0;padding:0}
+#vpf a{text-decoration:none;color:inherit}
+#vpf .w{max-width:760px;margin:0 auto}
+#vpf .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:56px}
+#vpf .top svg{height:14px;width:auto;display:block}
+#vpf .mono{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--m)}
+#vpf .mono.cy{color:var(--c)}
+#vpf .hero{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:22px}
+#vpf h1{font-family:Unbounded,sans-serif;font-weight:800;font-size:56px;line-height:1;margin:12px 0 16px;color:#fff;letter-spacing:-.5px}
+#vpf .lead{font-size:16px;line-height:1.6;color:var(--d);max-width:430px}
+#vpf{position:relative;overflow:hidden}
+#vpf .drive{flex:none;width:74px;height:auto;overflow:visible}
+#vpf .drive g,#vpf .drive rect,#vpf .drive circle{transform-box:view-box}
+#vpf #vpf-ring{transform-origin:40px 140px}
+#vpf #vpf-sp{transform-origin:40px 140px}
+@keyframes vpfled{0%,100%{opacity:.2}50%{opacity:1}}
+#vpf .led.on{animation:vpfled 1.4s ease-in-out infinite}
+#vpf .dw{position:relative;flex:none;padding:10px;margin:-10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#vpf .drive{cursor:pointer;-webkit-tap-highlight-color:transparent}
+#vpf .toast{position:absolute;right:calc(100% + 10px);top:46%;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:12px;color:#050607;background:var(--c);border-radius:8px;padding:6px 10px;opacity:0;transform:translateX(6px);transition:opacity .2s,transform .2s;pointer-events:none;cursor:pointer}
+#vpf .toast.on{opacity:1;transform:translateX(0);pointer-events:auto}
+#vpf .toast.on:hover{opacity:.85}
+#vpf .cap .row{justify-content:space-between!important;align-items:center}
+#vpf .ej{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--c);background:none;border:1px solid rgba(49,241,252,.4);border-radius:7px;padding:5px 10px;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+#vpf .ej:hover{background:rgba(49,241,252,.08)}
+#vpf .ej.ok{background:var(--c);color:#050607;border-color:var(--c)}
+@keyframes vpfnudge{0%,100%{transform:scale(1)}40%{transform:scale(1.08)}}
+#vpf .ej.nudge{animation:vpfnudge .35s ease-out 2}
+#vpf .cap{opacity:0}
+#vpf .bar i{transition:none}
+#vpf .lk.hl{border:1px solid rgba(49,241,252,.45);border-radius:12px;margin:10px 0;padding:16px 14px;background:rgba(49,241,252,.04)}
+#vpf .lk.hl .ic{background:var(--c);color:#050607;border-color:var(--c)}
+#vpf .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;color:#050607;background:var(--c);border-radius:4px;padding:1px 6px;margin-left:8px;vertical-align:2px}
+#vpf .cap{margin-bottom:56px}
+#vpf .cap .row{display:flex;justify-content:space-between;margin-bottom:8px}
+#vpf .bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+#vpf .bar i{display:block;height:100%;background:var(--c);width:0;transition:width .35s ease-out}
+#vpf .sec{margin:0 0 16px}
+#vpf .gh{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
+#vpf .gh .sec{margin:0}
+#vpf .gh .cnt{margin-left:10px;color:var(--c)}
+#vpf .arrs{display:flex;gap:8px}
+#vpf .ar{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--c);background:none;border:1px solid rgba(49,241,252,.4);border-radius:7px;width:34px;height:28px;cursor:pointer;transition:background .2s,opacity .2s}
+#vpf .ar:hover{background:rgba(49,241,252,.08)}
+#vpf .ar:disabled{opacity:.3;cursor:default;background:none}
+#vpf .guides{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 0 6px;margin-bottom:50px;overscroll-behavior-x:contain}
+#vpf .guides::-webkit-scrollbar{display:none}
+#vpf .guides .card{flex:0 0 calc((100% - 16px)/2.25);scroll-snap-align:start}
+#vpf .card{border:1px solid rgba(49,241,252,.3);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.03);display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+#vpf .card:hover{border-color:rgba(49,241,252,.7);transform:translateY(-2px)}
+#vpf .cov{height:132px;display:flex;align-items:center;justify-content:center;position:relative;background:#0B1A1C;font-family:Unbounded,sans-serif;font-weight:800;font-size:22px;color:#fff}
+#vpf .cov .cy{color:var(--c)}
+#vpf .cov.mono2{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:28px;color:var(--c)}
+#vpf .new{position:absolute;top:12px;left:12px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:400;background:var(--c);color:#050607;padding:3px 7px;border-radius:5px}
+#vpf .body{padding:18px;display:flex;flex-direction:column;flex:1}
+#vpf .meta{margin-bottom:8px}
+#vpf h3{font-family:Unbounded,sans-serif;font-weight:500;font-size:16px;line-height:1.3;color:#fff;margin-bottom:8px}
+#vpf .desc{font-size:14px;line-height:1.55;color:var(--d);margin-bottom:18px;flex:1}
+#vpf .btns{display:flex;gap:8px;flex-wrap:wrap}
+#vpf .btn{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;padding:10px 15px;border-radius:9px;transition:opacity .2s,background .2s}
+#vpf .btn.p{background:var(--c);color:#050607}
+#vpf .btn.p:hover{opacity:.85}
+#vpf .btn.s{border:1px solid rgba(49,241,252,.5);color:var(--c)}
+#vpf .btn.s:hover{background:rgba(49,241,252,.08)}
+#vpf .btn svg{width:15px;height:15px;flex:none}
+#vpf .links{border-top:1px solid var(--b);margin-bottom:56px}
+#vpf .lk{display:flex;align-items:center;gap:16px;padding:16px 4px;border-bottom:1px solid var(--b);transition:background .2s}
+#vpf .lk:hover{background:rgba(49,241,252,.04)}
+#vpf .lk .ic{width:40px;height:40px;border-radius:10px;border:1px solid rgba(49,241,252,.3);display:flex;align-items:center;justify-content:center;flex:none;font-family:Unbounded,sans-serif;font-weight:800;font-size:15px;color:var(--c)}
+#vpf .lk .tx{flex:1;min-width:0}
+#vpf .lk b{display:block;font-size:16px;font-weight:600;color:#fff;margin-bottom:2px}
+#vpf .lk span.dd{font-size:14px;color:var(--d);line-height:1.45}
+#vpf .lk .arr{color:var(--m);font-size:18px;transition:color .2s,transform .2s}
+#vpf .lk:hover .arr{color:var(--c);transform:translate(2px,-2px)}
+#vpf .links.sk{margin-bottom:12px}
+#vpf .lk .ic.s{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:14px}
+#vpf .lk .zip{font-family:'JetBrains Mono',monospace;font-size:12px;color:#050607;background:var(--c);border-radius:7px;padding:6px 10px;flex:none;white-space:nowrap}
+#vpf .lk:hover .zip{opacity:.85}
+#vpf .lk b.mn{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:15px}
+#vpf .skh{margin-bottom:56px;line-height:1.6}
+#vpf .cta{border:1px solid rgba(49,241,252,.3);border-radius:16px;padding:22px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+#vpf .cta p{font-size:15px;line-height:1.5;color:var(--t)}
+#vpf .cta p small{display:block;font-size:13px;color:var(--d);margin-top:2px}
+#vpf .foot{margin-top:40px;display:flex;justify-content:space-between}
+@media (max-width:640px){
+ #vpf{padding:28px 16px 48px}
+ #vpf .top{margin-bottom:40px}
+ #vpf h1{font-size:44px}
+ #vpf .drive{width:52px}
+ #vpf .toast{font-size:11px;right:0;top:auto;bottom:calc(100% - 30px);transform:translateY(6px)}
+ #vpf .toast.on{transform:translateY(0)}
+ #vpf .lead{font-size:15px}
+ #vpf .cap,#vpf .links,#vpf .skh{margin-bottom:44px}
+ #vpf .guides{margin-bottom:38px;gap:12px}
+ #vpf .guides .card{flex-basis:85%}
+ #vpf .arrs{display:none}
+ #vpf .links.sk{margin-bottom:10px}
+ #vpf .lk .tag{display:none}
+ #vpf .btn{flex:1;justify-content:center}
+}
+</style>
+
+<div id="vpf"><div class="w">
+ <div class="top">
+  <svg viewBox="0 0 1563 157" aria-label="VALPOD"><path fill="#31F1FC" fill-rule="evenodd" d="M1064.7 144.4C1041.7 138.9 1020.5 116.4 1015.5 92.5C1009.2 62.4 1024.1 31.1 1051.0 17.5C1065.6 10.2 1060.0 10.6 1144.5 10.2C1195.5 10.0 1222.7 10.3 1227.4 11.0C1264.3 16.7 1290.4 55.0 1282.6 92.0C1277.3 117.2 1255.2 140.0 1231.2 144.9C1222.6 146.7 1072.2 146.2 1064.7 144.4ZM63.4 78.8C34.3 42.9 10.4 13.2 10.2 12.8C10.0 12.4 24.9 12.0 43.3 12.0L76.7 12.0L113.0 56.8C132.9 81.4 149.6 101.6 150.0 101.8C150.4 101.9 167.1 81.8 187.1 57.1L223.5 12.1L256.8 12.0C278.2 12.0 290.0 12.4 289.8 13.0C289.6 13.5 265.9 43.2 237.0 78.9L184.5 143.9L150.4 143.9L116.2 144.0L63.4 78.8ZM276.3 78.2L329.6 12.5L363.5 12.5L397.5 12.5L436.8 61.0C458.4 87.7 482.4 117.3 490.1 126.7L504.0 144.0L470.3 144.0L436.5 143.9L428.7 134.5L421.0 125.0L363.5 125.0L306.0 125.0L298.3 134.5L290.5 144.0L256.8 144.0L223.0 144.0L276.3 78.2ZM512.0 78.0L512.0 12.0L541.5 12.2L571.1 12.5L571.3 55.5L571.5 98.5L654.8 98.8L738.0 99.0L738.0 121.5L738.0 144.0L625.0 144.0L512.0 144.0L512.0 78.0ZM753.2 78.2L753.5 12.5L858.0 12.5C974.1 12.5 966.1 12.1 978.7 19.1C1014.1 39.0 1012.3 95.0 975.7 112.4C964.2 117.9 962.9 118.0 884.8 118.0L813.0 118.0L813.0 131.0L813.0 144.0L783.0 144.0L753.0 144.0L753.2 78.2ZM1295.0 78.0L1295.0 11.9L1396.8 12.2C1511.0 12.6 1501.2 11.9 1517.3 20.2C1542.7 33.4 1556.8 64.1 1550.6 92.4C1546.4 111.2 1532.8 128.7 1516.0 136.8C1500.5 144.4 1507.2 144.0 1395.3 144.0L1295.0 144.0L1295.0 78.0ZM1428.8 93.4C1470.5 84.4 1497.4 78.2 1496.3 77.8C1495.3 77.4 1464.8 70.7 1428.5 63.0C1392.2 55.2 1360.8 48.5 1358.8 48.0L1355.0 47.2L1355.0 78.2L1355.0 109.2L1357.2 108.8C1358.5 108.5 1390.7 101.6 1428.8 93.4ZM1213.6 95.1C1226.9 89.0 1227.8 69.7 1215.0 62.2L1210.5 59.5L1149.0 59.5L1087.5 59.5L1083.2 62.0C1069.9 69.6 1070.7 88.7 1084.5 95.1C1090.7 98.0 1207.3 98.0 1213.6 95.1ZM390.0 87.2C390.0 86.1 364.5 54.7 363.6 54.8C362.6 54.8 337.0 86.2 337.0 87.2C337.0 87.7 348.9 88.0 363.5 88.0C378.1 88.0 390.0 87.7 390.0 87.2ZM940.5 71.6C944.4 69.9 945.9 66.3 944.4 62.1C942.6 57.1 941.0 57.0 874.6 57.2L813.5 57.5L813.2 63.9C813.0 67.4 813.1 70.9 813.4 71.6C814.2 73.7 935.5 73.6 940.5 71.6Z"/></svg>
+  <a class="mono" href="https://t.me/valpod87" target="_blank" rel="noopener">t.me/valpod87</a>
+ </div>
+
+ <div class="hero">
+  <div>
+   <div class="mono cy">/VALPOD/ФЛЕШКА</div>
+   <h1>Флешка</h1>
+   <p class="lead">Всё полезное про ИИ-визуал. Закидываю сюда гайды, инструменты и ссылки.</p>
+  </div>
+  <div class="dw" id="vpf-dw"><span class="toast" id="vpf-toast"></span>
+  <svg class="drive" id="vpf-drv" role="button" aria-label="Флешка" viewBox="0 0 80 170" fill="none" aria-hidden="true">
+   <g id="vpf-sk"><rect x="22" y="140" width="36" height="22" rx="3" fill="#050607" stroke="#31F1FC" stroke-width="1.6"/><line x1="10" y1="162" x2="70" y2="162" stroke="#31F1FC" stroke-opacity=".4" stroke-width="1.6"/></g>
+   <g id="vpf-mv"><g id="vpf-fl">
+    <g stroke="#31F1FC" stroke-width="1.6"><rect x="18" y="10" width="44" height="86" rx="10" fill="#050607"/><rect x="28" y="96" width="24" height="22" rx="2" fill="#050607"/></g>
+    <g id="vpf-front"><g stroke="#31F1FC" stroke-width="1.6"><rect x="34" y="104" width="4" height="4"/><rect x="42" y="104" width="4" height="4"/></g><circle id="vpf-led" class="led" cx="40" cy="28" r="3.6" fill="#31F1FC" opacity=".2"/></g>
+    <g id="vpf-back" opacity="0" stroke="#31F1FC" stroke-width="1.6" stroke-opacity=".5"><line x1="30" y1="40" x2="50" y2="40"/><line x1="30" y1="48" x2="44" y2="48"/></g>
+   </g></g>
+   <g id="vpf-fx" opacity="0"><circle id="vpf-ring" cx="40" cy="140" r="8" stroke="#31F1FC" stroke-width="1.6"/>
+    <g id="vpf-sp" stroke="#31F1FC" stroke-width="1.8" stroke-linecap="round"><line x1="40" y1="128" x2="40" y2="122"/><line x1="49" y1="131" x2="53" y2="127"/><line x1="31" y1="131" x2="27" y2="127"/><line x1="54" y1="140" x2="60" y2="140"/><line x1="26" y1="140" x2="20" y2="140"/><line x1="51" y1="136" x2="57" y2="133"/><line x1="29" y1="136" x2="23" y2="133"/></g></g>
+   <rect id="vpf-skF" x="22" y="140" width="36" height="22" rx="3" fill="#050607" stroke="#31F1FC" stroke-width="1.6" opacity="0"/>
+  </svg></div>
+ </div>
+
+ <div class="cap" id="vpf-cap">
+  <div class="row"><span class="mono" style="color:var(--d)">места хватит всем</span><button class="ej" id="vpf-ej" type="button">⏏ безопасно извлечь</button></div>
+  <div class="bar"><i id="vpf-bar"></i></div>
+ </div>
+
+ <div class="gh"><div><span class="mono sec">01 — гайды</span><span class="mono cnt" id="vpf-cnt"></span></div>
+  <div class="arrs"><button class="ar" id="vpf-prev" type="button" aria-label="Назад">←</button><button class="ar" id="vpf-next" type="button" aria-label="Вперёд">→</button></div></div>
+ <div class="guides" id="vpf-guides"></div>
+
+ <div class="mono sec">02 — скиллы для Claude</div>
+ <div class="links sk" id="vpf-skills"></div>
+ <p class="mono skh">как поставить: Claude → настройки → скиллы → загрузить ZIP. Перед установкой прочитай SKILL.md</p>
+
+ <div class="mono sec">03 — полезные ссылки</div>
+ <div class="links" id="vpf-links"></div>
+
+ <div class="cta">
+  <p>Новое сначала падает в канал<small>Гайды, разборы и новости ИИ-визуала</small></p>
+  <a class="btn p" href="https://t.me/valpod87" target="_blank" rel="noopener">t.me/valpod87</a>
+ </div>
+
+ <div class="foot"><span class="mono">VALPOD · 2026</span><span class="mono">флешка обновляется</span></div>
+</div></div>
+
+<script>
+(function(){
+/* ====== НАПОЛНЕНИЕ ФЛЕШКИ ======
+   Новый гайд — добавить объект в начало GUIDES.
+   drive: id файла из ссылки Google Диска (между /d/ и /view).
+   post: ссылка на пост в канале; пусто — кнопки не будет.
+   isNew: true — метка «новое».
+   hidden: true — карточка скрыта (гайд ещё не вышел); убрать, когда выйдет.                                   */
+var GUIDES=[
+ {title:"Звук без хрипа",desc:"Dynamics Processing на мастер-канале в Premiere Pro: пошагово по карточкам, зачем потолок −5 dB и Spline Curves, шпаргалка уровней голоса, музыки и SFX",meta:"PDF · 6 стр · звук",
+  cover:'<span class="cy">−5</span>&nbsp;dB',coverClass:"",drive:"1iZVL0ptTNOCz-mTEOx9g__zgwnWoHZke",post:"",isNew:true,hidden:true},
+ {title:"Как не сжечь все деньги в Seedance",desc:"Правила, которые экономят десятки и сотни тысяч ₽ на генерациях: черновики в 480p, обучение нейронки скиллом Seedance Director, реф-шоты, длина генерации, шаблон промпта и чек-лист",meta:"PDF · 15 стр · видео",
+  cover:'<span class="cy">СИД</span>',coverClass:"",drive:"1FkBuDgFx2RHWsdWUvV5dERw_7YWPNgGD",post:"",isNew:true},
+ {title:"Частота кадров без тормозов",desc:"Как FPS меняет картинку, почему слоу-мо дёргается, секвенция и конформ в Premiere, дорисовка кадров в Topaz и шпаргалка скоростей",meta:"PDF · 16 стр · монтаж",
+  cover:'<span class="cy">24</span>&nbsp;к/с',coverClass:"",drive:"1za0YReMfz4h_0RUNFCfwDpmkQ_ReA3io",post:"",isNew:true,hidden:true},
+ {title:"Склеить то, что не клеится",desc:"Переход через Difference в Premiere Pro и X-Ray для мастеров нейросетей: пошагово, со всеми промптами",meta:"PDF · 13 стр · монтаж",
+  cover:'X&#8209;<span class="cy">RAY</span>',coverClass:"",drive:"1y5_QG2t0QWcHzfdG9eJEkXNxmPHW-yQJ",post:"https://t.me/valpod87/1036",isNew:true},
+ {title:"7 визуальных стилей",desc:"Flash Light, Risograph, CRT, Receipt ticket, Blob Tracking, Retro Futurism и Datamosh: готовые промпты, примеры и инструмент для каждого стиля",meta:"PDF · 36 стр · промпты",
+  cover:'7&nbsp;<span class="cy">СТИЛЕЙ</span>',coverClass:"",drive:"1kKHYt3JX8EmWBqwXzUVcj7D84jTiRpva",post:"https://t.me/valpod87/1025",isNew:false},
+ {title:"Уверенный старт в нейросетях для визуала",desc:"Мини-курс: 5 уровней от брифа до видео на примере мультфильма с нуля. Промпты, монтажный лист, ошибки",meta:"PDF · 18 стр · видео",
+  cover:'LVL&nbsp;<span class="cy">0–4</span>',coverClass:"",drive:"1qkwvHvzkwPVG5xVM5DdPE8JrqBSG1f-V",post:"https://t.me/valpod87/1020",isNew:false},
+ {title:"Вайбкодинг для новичков",desc:"Первая утилита за вечер без знания кода",meta:"PDF · 8 стр · код",
+  cover:'<span class="cy">ВАЙБ</span>кодинг',coverClass:"",drive:"1qf4vwN2zYMPQf2aw8HDr1GKfIr7lmQoh",post:"https://t.me/valpod87/954",isNew:false},
+ {title:"Моушн-дизайн кодом",desc:"Ролик без After Effects: Claude и OUTSEE, от брифа до рендера",meta:"PDF · 12 стр · моушн",
+  cover:"test_",coverClass:"mono2",drive:"1CbXOBevvsChUKc_pssdPl_wgEzyJxoBm",post:"https://t.me/valpod87/1010",isNew:false}
+];
+var SKILLS=[
+ {name:"valpod-seedance-director",desc:"Режиссёрские промпты для Seedance 2.5: русский мастер + готовый английский промпт",tag:"видео",drive:"1sE1qy_4LglAroyLDSuSBgAQIcwmDqyx-"},
+ {name:"valpod-montage-list",desc:"Монтажный лист и проверка склеек по 10 принципам монтажа",tag:"монтаж",drive:"1wSszSe8UaUInzt4Uh303OG00sCXrY_Ti"}
+];
+var LINKS=[
+ {name:"OUTSEE",desc:"Мой ИИ-агрегатор: картинки, видео, звук и моушн в одном месте",tag:"агрегатор",url:"https://outsee.io/r/dhdszh",ic:"O",hl:true,badge:"мой выбор"},
+ {name:"Auphonic",desc:"Выравнивает громкость и чистит звук",tag:"звук",url:"https://auphonic.com",ic:"A"},
+ {name:"PureRef",desc:"Доска референсов поверх всех окон",tag:"референсы",url:"https://www.pureref.com",ic:"P"},
+ {name:"@dirref_bot",desc:"Бот для скачивания видео из соцсетей. Бесплатно и без рекламы",tag:"видео",url:"https://t.me/dirref_bot",ic:"↓"},
+ {name:"Adobe Color",desc:"Подбор палитр и цветовых гармоний, можно снять палитру с картинки",tag:"цвет",url:"https://color.adobe.com",ic:"C"}
+];
+/* ================================ */
+var DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
+var TG='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.6 18.7 19.7c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13.3l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.6 3.1c.9-.3 1.6.2 1.3 1.5z"/></svg>';
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var g=document.getElementById('vpf-guides'),h='';
+GUIDES.filter(function(x){return !x.hidden;}).forEach(function(x){
+ var b='<a class="btn p" href="https://drive.google.com/uc?export=download&id='+x.drive+'" target="_blank" rel="noopener">'+DL+'Скачать PDF</a>';
+ if(x.post)b+='<a class="btn s" href="'+esc(x.post)+'" target="_blank" rel="noopener">'+TG+'Пост в канале</a>';
+ h+='<div class="card"><div class="cov '+x.coverClass+'">'+x.cover+(x.isNew?'<span class="new">новое</span>':'')+'</div>'+
+    '<div class="body"><div class="mono cy meta">'+esc(x.meta)+'</div><h3>'+esc(x.title)+'</h3><p class="desc">'+esc(x.desc)+'</p><div class="btns">'+b+'</div></div></div>';
+});
+g.innerHTML=h;
+/* --- карусель гайдов --- */
+(function(){
+ var cards=g.children,n=cards.length,cnt=document.getElementById('vpf-cnt'),pv=document.getElementById('vpf-prev'),nx=document.getElementById('vpf-next');
+ function step(){return cards.length>1?cards[1].offsetLeft-cards[0].offsetLeft:g.clientWidth}
+ function upd(){
+  var max=g.scrollWidth-g.clientWidth,i=max-g.scrollLeft<4?n-1:Math.round(g.scrollLeft/step());
+  cnt.textContent=n>1?(i+1)+'/'+n:'';pv.disabled=g.scrollLeft<4;nx.disabled=max-g.scrollLeft<4;
+ }
+ pv.addEventListener('click',function(){g.scrollBy({left:-step(),behavior:'smooth'})});
+ nx.addEventListener('click',function(){g.scrollBy({left:step(),behavior:'smooth'})});
+ var rt;g.addEventListener('scroll',function(){cancelAnimationFrame(rt);rt=requestAnimationFrame(upd)},{passive:true});
+ window.addEventListener('resize',upd);upd();
+})();
+var sk=document.getElementById('vpf-skills');h='';
+SKILLS.forEach(function(x){
+ h+='<a class="lk" href="https://drive.google.com/uc?export=download&id='+x.drive+'" target="_blank" rel="noopener"><span class="ic s">/S</span>'+
+    '<span class="tx"><b class="mn">'+esc(x.name)+'</b><span class="dd">'+esc(x.desc)+'</span></span><span class="mono tag">'+esc(x.tag)+'</span><span class="zip">↓ ZIP</span></a>';
+});
+sk.innerHTML=h;
+var l=document.getElementById('vpf-links');h='';
+LINKS.forEach(function(x){
+ h+='<a class="lk'+(x.hl?' hl':'')+'" href="'+esc(x.url)+'" target="_blank" rel="noopener"><span class="ic">'+esc(x.ic)+'</span>'+
+    '<span class="tx"><b>'+esc(x.name)+(x.badge?'<span class="badge">'+esc(x.badge)+'</span>':'')+'</b><span class="dd">'+esc(x.desc)+'</span></span><span class="mono tag">'+esc(x.tag)+'</span><span class="arr">↗</span></a>';
+});
+l.innerHTML=h;
+/* --- анимация: флешка входит с третьей попытки, извлекается только безопасно --- */
+var $=function(i){return document.getElementById(i)};
+var dw=$('vpf-dw'),drv=$('vpf-drv'),toast=$('vpf-toast'),ej=$('vpf-ej'),fx=$('vpf-fx'),ring=$('vpf-ring'),sp=$('vpf-sp'),mv=$('vpf-mv'),fl=$('vpf-fl'),fr=$('vpf-front'),bk=$('vpf-back'),
+ sk=$('vpf-sk'),skF=$('vpf-skF'),led=$('vpf-led'),bar=$('vpf-bar'),cap=$('vpf-cap');
+var IN='cubic-bezier(.6,0,.9,.4)',OUT='cubic-bezier(.1,.7,.3,1)',anims=[],timers=[],busy=true,safe=false,tt;
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function P(y,r){return 'translate(0px,'+y+'px) rotate('+r+'deg)'}
+function A(e,k,o){var a=e.animate(k,Object.assign({fill:'forwards'},o));anims.push(a);return a}
+function T(f,d){timers.push(setTimeout(f,d))}
+function clear(){anims.forEach(function(a){a.cancel()});anims=[];timers.forEach(clearTimeout);timers=[]}
+fl.style.transformOrigin='40px 64px';mv.style.transformOrigin='40px 118px';
+function seated(){
+ clear();mv.style.transform=P(40,0);fl.style.opacity=1;sk.style.opacity=1;skF.style.opacity=1;fr.style.opacity=1;bk.style.opacity=0;fx.style.opacity=0;
+ led.style.opacity='';led.setAttribute('class','led on');cap.style.transition='none';cap.style.opacity=1;bar.style.transition='none';bar.style.width='66%';busy=false;
+}
+function hit(t,y0,d){
+ A(mv,[{transform:P(y0,0)},{transform:P(22,0)}],{duration:d,delay:t,easing:IN});
+ A(mv,[{transform:P(22,0)},{transform:P(13,-5),offset:.3},{transform:P(9,3),offset:.6},{transform:P(7,-1),offset:.82},{transform:P(6,0)}],{duration:d===300?450:260,delay:t+d,easing:OUT});
+}
+function flip(t,toBack){
+ A(fl,[{transform:'scaleX(1)'},{transform:'scaleX(0.02)'}],{duration:100,delay:t,easing:'cubic-bezier(.5,0,1,1)'});
+ T(function(){fr.style.opacity=toBack?0:1;bk.style.opacity=toBack?1:0},t+100);
+ A(fl,[{transform:'scaleX(0.02)'},{transform:'scaleX(1.08)',offset:.65},{transform:'scaleX(1)'}],{duration:170,delay:t+100,easing:'cubic-bezier(0,0,.4,1)'});
+}
+/* S — старт попыток; withIntro — флешка появляется из воздуха */
+function play(S,withIntro){
+ busy=true;safe=false;ej.classList.remove('ok');ej.textContent='⏏ безопасно извлечь';
+ if(reduce||!Element.prototype.animate){seated();return}
+ if(withIntro){
+  A(fl,[{opacity:0,transform:'translateY(-12px)'},{opacity:1,transform:'translateY(0)'}],{duration:350,delay:S-250,easing:OUT});
+  A(sk,[{opacity:0},{opacity:1}],{duration:350,delay:S-250,easing:OUT});
+ }
+ hit(S,0,300);                 /* попытка 1 — неторопливая */
+ flip(S+630,true);
+ hit(S+850,6,150);             /* попытка 2 — раздражённая */
+ flip(S+1180,false);
+ var I=S+1370,D3=375;          /* попытка 3 — решительная */
+ T(function(){skF.style.opacity=1},I);
+ A(mv,[{transform:P(6,0)},{transform:P(42,0),offset:.7},{transform:P(38,0),offset:.85},{transform:P(40,0)}],{duration:D3,delay:I,easing:IN});
+ T(function(){                 /* ура, наконец-то */
+  fx.style.opacity=1;
+  A(ring,[{transform:'scale(1)',opacity:1,strokeWidth:1.6},{transform:'scale(5)',opacity:0,strokeWidth:.4}],{duration:650,easing:OUT});
+  A(sp,[{transform:'scale(.6)',opacity:0},{transform:'scale(1.15)',opacity:1,offset:.3},{transform:'scale(1.6)',opacity:0}],{duration:520,easing:OUT});
+  A(skF,[{transform:'translateY(0)'},{transform:'translateY(2px)'},{transform:'translateY(0)'}],{duration:200,easing:'ease-out',fill:'none'});
+  A(led,[{opacity:.2},{opacity:1},{opacity:.2},{opacity:1},{opacity:.2},{opacity:1}],{duration:480,fill:'none'}).onfinish=function(){led.style.opacity='';led.setAttribute('class','led on')};
+ },I+D3*.7);
+ T(function(){cap.style.transition='opacity .3s ease-out';cap.style.opacity='1';bar.style.transition='width .9s cubic-bezier(.22,1,.36,1) .08s';bar.style.width='66%'},I+D3+40);
+ T(function(){busy=false},I+D3+700);
+}
+function say(t,stay){toast.textContent=t;toast.classList.add('on');clearTimeout(tt);if(!stay)tt=setTimeout(function(){toast.classList.remove('on')},1700)}
+/* кнопка «безопасно извлечь» */
+ej.addEventListener('click',function(){
+ if(busy)return;
+ if(safe){say('жми на флешку',true);return}
+ safe=true;ej.classList.add('ok');ej.textContent='✓ можно извлекать';
+ led.setAttribute('class','led');led.style.opacity='.2';say('теперь можно — жми',true);
+});
+/* клик по флешке */
+dw.addEventListener('click',function(){
+ if(busy)return;
+ if(!safe){
+  say('не балуйся!');
+  ej.classList.remove('nudge');void ej.offsetWidth;ej.classList.add('nudge');
+  if(!reduce&&Element.prototype.animate)mv.animate([{transform:P(40,0)},{transform:P(38,-3)},{transform:P(39,2)},{transform:P(40,0)}],{duration:300,easing:'ease-out'});
+  return;
+ }
+ /* извлекаем: вверх из гнезда, шкала гаснет — и всё заново */
+ busy=true;clear();fx.style.opacity=0;toast.classList.remove('on');
+ cap.style.transition='opacity .25s';cap.style.opacity='0';bar.style.transition='none';bar.style.width='0';
+ A(mv,[{transform:P(40,0)},{transform:P(-4,0),offset:.75},{transform:P(0,0)}],{duration:380,easing:OUT});
+ T(function(){skF.style.opacity=0},120);
+ play(380+250,false);
+});
+play(650,true);
+})();
+</script>
+
+</body>
+</html>
