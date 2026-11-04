@@ -27,7 +27,7 @@ html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--mono);font-size:12px;overflow:hidden}
 #stageWrap{position:fixed;inset:0;right:300px;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg)}
 #stage{position:relative;background:var(--stage);overflow:hidden;outline:1px solid var(--line);max-width:100%;max-height:100%}
-#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #hud{pointer-events:none}
 #panel{position:fixed;top:0;right:0;bottom:0;width:300px;overflow:auto;background:var(--panel);border-left:1px solid var(--line);padding:14px max(14px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) 14px;display:flex;flex-direction:column;gap:12px}
 #panel h1{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.04em;margin:0}
@@ -80,6 +80,34 @@ input[type=color]{width:100%;height:30px;padding:2px;background:transparent;bord
   #stageWrap{right:0;bottom:46%}
   #panel{top:auto;left:0;width:auto;height:46%;border-left:0;border-top:1px solid var(--line);padding-left:max(14px,env(safe-area-inset-left,0px))}
 }
+
+/* ---------- phone layout: preview on top, one tab at a time, export bar pinned at the bottom ---------- */
+#tabs,#foot{display:none}
+body.mob #stageWrap{right:0;bottom:auto;height:50%;padding:8px}
+body.mob #panel{top:50%;bottom:0;left:0;right:0;width:auto;height:auto;border-left:0;border-top:1px solid var(--line);padding:0;gap:0}
+body.mob #panel > *{flex-shrink:0}
+body.mob .phead h1,body.mob .phead > .sub{display:none}
+body.mob .phead{padding:0}
+body.mob .phead .warn{margin:8px 12px 0}
+body.mob #tabs{display:flex;gap:6px;overflow-x:auto;position:sticky;top:0;z-index:6;background:#0a0f13;padding:8px max(12px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);scrollbar-width:none}
+body.mob #tabs::-webkit-scrollbar{display:none}
+#tabs button{flex:none;padding:8px 12px;font-size:12px;border-radius:999px}
+body.mob .grp{display:none}
+body.mob .grp.on{display:flex;border-top:0;padding:14px max(14px,env(safe-area-inset-right,0px)) 14px max(14px,env(safe-area-inset-left,0px));gap:12px}
+body.mob .grp > .lbl{display:none}
+body.mob .pin{position:static;margin:0;box-shadow:none;border:0;background:none}
+body.mob .slider{grid-template-columns:1fr 48px;row-gap:2px}
+body.mob .slider > span{grid-column:1/-1;color:var(--muted);font-size:11px}
+body.mob .field{grid-template-columns:1fr;gap:4px}
+body.mob .field > span{color:var(--muted);font-size:11px}
+body.mob input[type=range]{height:30px}
+body.mob button,body.mob .filebtn,body.mob select{font-size:13px;padding:10px 12px}
+body.mob .sw{font-size:10px;padding:4px 8px}
+body.mob #joy{width:104px;height:104px}
+body.mob .joyinfo .sub{display:none}
+body.mob #foot{display:flex;flex-direction:column;gap:6px;position:sticky;bottom:0;z-index:6;margin-top:auto;background:#0a0f13;border-top:1px solid var(--line);padding:10px max(12px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+body.mob #foot button.big{padding:12px}
+body.mob #foot #status{font-size:10px}
 </style>
 </head>
 <body>
@@ -650,7 +678,7 @@ function layoutStage(){
   const aw = Math.max(50, wrap.width - 32), ah = Math.max(50, wrap.height - 32);
   const s = Math.min(aw/fw, ah/fh); viewW = Math.round(fw*s); viewH = Math.round(fh*s);
   stage.style.width = viewW + 'px'; stage.style.height = viewH + 'px';
-  viewDpr = Math.min(2, devicePixelRatio || 1);
+  viewDpr = Math.min(document.body.classList.contains('mob') ? 1.5 : 2, devicePixelRatio || 1);
   setRenderSize(viewW*viewDpr, viewH*viewDpr);
   hud.width = viewW*viewDpr; hud.height = viewH*viewDpr;
   fitCamera();
@@ -869,6 +897,46 @@ document.querySelectorAll('#panel .grp > .lbl').forEach(l => {
   l.addEventListener('click', tg);
   l.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tg(); } });
 });
+
+// phone layout: tabs instead of one long panel, export buttons always at the bottom
+const panel = $('panel'), mq = matchMedia('(max-width: 700px)');
+panel.firstElementChild.classList.add('phead');
+const TAB_ORDER = ['Источник', 'Сцена', 'Эффекты', 'Камера', 'Трек-точки', 'Экспорт'];
+const TAB_NAME = {'Трек-точки': 'Точки'};
+const groups = {};
+panel.querySelectorAll('.grp').forEach(g => { groups[g.querySelector('.lbl').textContent.trim()] = g; });
+const tabs = document.createElement('nav'); tabs.id = 'tabs'; tabs.setAttribute('aria-label', 'Разделы настроек');
+panel.insertBefore(tabs, panel.children[1]);
+const foot = document.createElement('div'); foot.id = 'foot'; panel.appendChild(foot);
+const exportGrp = groups['Экспорт'];
+const footItems = [$('render').parentElement, $('bar'), $('status'), $('dlLink')];
+let activeTab = 'Источник';
+function showTab(name){
+  activeTab = name;
+  Object.entries(groups).forEach(([k, g]) => g.classList.toggle('on', k === name));
+  tabs.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  panel.scrollTop = 0;
+}
+TAB_ORDER.filter(n => groups[n]).forEach(n => {
+  const b = document.createElement('button'); b.type = 'button'; b.dataset.tab = n; b.textContent = TAB_NAME[n] || n;
+  b.onclick = () => showTab(n); tabs.appendChild(b);
+});
+function applyLayout(){
+  const mob = mq.matches;
+  document.body.classList.toggle('mob', mob);
+  if (mob) {
+    Object.values(groups).forEach(g => g.classList.remove('collapsed'));
+    footItems.forEach(el => foot.appendChild(el));
+    showTab(activeTab);
+  } else {
+    footItems.forEach(el => exportGrp.appendChild(el));
+    Object.values(groups).forEach(g => { g.classList.remove('on'); const key = g.querySelector('.lbl').textContent.trim(); g.classList.toggle('collapsed', !!folded[key]); });
+  }
+  layoutStage();
+}
+mq.addEventListener ? mq.addEventListener('change', applyLayout) : mq.addListener(applyLayout);
+applyLayout();
+if (mq.matches) { $('density').value = 260; $('densityO').textContent = '260'; $('status').textContent = 'MP4 — для Reels, GIF — для сайтов и превью.'; }
 
 setPreset('pSphere'); buildFrom(sphereImage()); layoutStage(); requestAnimationFrame(frame);
 })();
