@@ -1,0 +1,1360 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="robots" content="noindex">
+<title>Контент-план NEW BLENDER · Женя Прокопчик</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column; two tabs — «Лента» (IG-style 3-up grid of release tiles with step toggles and script sheet) and «Отложенные идеи» (status filter → table → add form) */
+:root{
+  --bg:#07090b; --panel:#0f1316; --panel-2:#151a1e; --line:#1f272d;
+  --fg:#e8eef1; --muted:#8a979f; --accent:#33d6f0; --accent-dim:rgba(51,214,240,.14);
+  --busy:#c9a24a; --c-screen:#33d6f0; --c-doas:#5b84ff; --c-useful:#ff5fd2; --c-carousel:#b694ff; --c-case:#e8eef1; --c-exp:#9aa7af; --done:#5c6a72; --wait:#c9a24a; --plan:#33d6f0; --work:#7be38f; --st-ready:#4fd96b; --st-edited:#b5e04a; --st-shot:#f2d33c; --st-script:#f5913a; --st-idea:#ff5252;
+  --f-display:"Unbounded", "Golos Text", system-ui, sans-serif;
+  --f-body:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:28px}
+.tab{display:flex;flex-direction:column;gap:36px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,5vw,38px);line-height:1.1;margin:6px 0 0;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:500;font-size:17px;margin:0;letter-spacing:.01em}
+.lead{color:var(--muted);margin:10px 0 0;max-width:62ch}
+header{display:flex;flex-direction:column;gap:18px}
+
+nav.tabs{display:flex;gap:4px;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;align-self:flex-start;flex-wrap:wrap}
+nav.tabs button{font:600 14px var(--f-body);color:var(--muted);background:transparent;border:0;border-radius:8px;padding:8px 16px;cursor:pointer;display:flex;gap:8px;align-items:center}
+nav.tabs button[aria-selected="true"]{background:var(--accent-dim);color:var(--fg)}
+nav.tabs button .n{font:500 12px var(--f-mono);color:var(--accent);font-variant-numeric:tabular-nums}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.progress{display:flex;align-items:center;gap:14px}
+.bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.pct{font-family:var(--f-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:7ch;text-align:right}
+.rhythm{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--f-mono);font-size:12px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.chip b{color:var(--fg);font-weight:500}
+
+.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.reels{grid-template-columns:1fr}}
+.reel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.reel .rub{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.reel .topic{font-weight:600;font-size:15px;line-height:1.35}
+.reel dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13px}
+.reel dt{color:var(--muted)}
+.reel dd{margin:0}
+.kw{display:flex;flex-direction:column;gap:4px;margin-top:auto}
+.kw label{font-size:12px;color:var(--muted)}
+.kw input{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;color:var(--fg);font:500 14px var(--f-mono);padding:8px 10px;width:100%}
+
+.days{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.day{display:grid;grid-template-columns:120px minmax(0,1fr);gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+@media (max-width:560px){.day{grid-template-columns:1fr;gap:10px}}
+.dname{display:flex;flex-direction:column;gap:6px}
+.dname .d{font-family:var(--f-display);font-weight:500;font-size:15px}
+.dname .date{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.mode{align-self:flex-start;font-family:var(--f-mono);font-size:11px;padding:2px 8px;border-radius:999px;background:var(--accent-dim);color:var(--accent)}
+.mode.pub{background:transparent;border:1px solid var(--accent)}
+.dbody{display:flex;flex-direction:column;gap:10px;min-width:0}
+.busy{display:flex;flex-wrap:wrap;gap:6px}
+.busy span{font-family:var(--f-mono);font-size:11px;color:var(--busy);border:1px dashed rgba(201,162,74,.45);border-radius:6px;padding:2px 7px}
+ul.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.task{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:8px;background:var(--panel);border:1px solid transparent;cursor:pointer}
+.task:hover{border-color:var(--line)}
+.task input{appearance:none;flex:none;width:18px;height:18px;margin:1px 0 0;border:1.5px solid var(--muted);border-radius:5px;display:grid;place-items:center;cursor:pointer}
+.task input:checked{background:var(--accent);border-color:var(--accent)}
+.task input:checked::after{content:"";width:9px;height:5px;border:2px solid #04161a;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.task .t{flex:1;min-width:0}
+.task .who{flex:none;font-family:var(--f-mono);font-size:11px;color:var(--muted);padding-top:2px}
+.task .who.c{color:var(--accent)}
+.task.done .t{color:var(--done);text-decoration:line-through;text-decoration-color:var(--done)}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:500 12px var(--f-mono);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.filters button[aria-pressed="true"]{border-color:var(--accent);color:var(--fg);background:var(--accent-dim)}
+.filters + .filters{margin-top:8px}
+.fmtsel{font:500 12px var(--f-mono);padding:4px 6px}
+.filters b{font-variant-numeric:tabular-nums;color:var(--fg);margin-left:4px}
+table{width:100%;border-collapse:collapse}
+th{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+td.title{font-weight:600;min-width:180px}
+td.desc{color:var(--muted);font-size:14px;max-width:44ch}
+td.date{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.rub{font:500 11px var(--f-mono);letter-spacing:.06em;color:var(--accent);white-space:nowrap}
+select{background:var(--panel-2);color:var(--fg);border:1px solid var(--line);border-radius:8px;font:500 13px var(--f-body);padding:6px 8px;cursor:pointer}
+.st{display:inline-flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.s-wait .dot{background:var(--wait)} .s-plan .dot{background:var(--plan)} .s-work .dot{background:var(--work)} .s-done .dot{background:var(--done)}
+tr.s-done td.title{color:var(--done);text-decoration:line-through}
+.empty{color:var(--muted);padding:24px 12px}
+@media (max-width:640px){
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tr{border-bottom:1px solid var(--line);padding:12px 0}
+  td{border:0;padding:4px 0}
+  td.desc{max-width:none}
+}
+.add{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.row{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+@media (max-width:560px){.row{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:12px;color:var(--muted)}
+.add input,.add textarea,.add select{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;color:var(--fg);font:400 14px var(--f-body);padding:9px 10px;width:100%}
+.add textarea{min-height:70px;resize:vertical}
+.add button{align-self:flex-start;font:600 14px var(--f-body);background:var(--accent);color:#04161a;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}
+.add button:disabled{opacity:.5;cursor:default}
+
+footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.status{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+
+/* Feed: Instagram-like grid of release tiles */
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.feed{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+@media (max-width:760px){.feed{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.feed{grid-template-columns:1fr}}
+.tile{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;aspect-ratio:4/5;max-width:100%}
+@media (max-width:480px){.tile{aspect-ratio:auto}}
+.tile.today{box-shadow:0 0 0 1px var(--fg) inset}
+.tile.pub .steps{opacity:.6}
+.ready{align-self:flex-start;font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:#33d6f0;color:#07090b}
+.tile .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.tile .when{display:flex;flex-direction:column;line-height:1}
+.tile .dd{font-family:var(--f-display);font-weight:700;font-size:26px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.tile .wd{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.1em}
+.tile .fmt{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tile .fmt.trial{border-color:var(--busy);color:var(--busy)}
+.tile .rubr{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--cat,var(--accent));display:flex;align-items:center;gap:7px}
+.tile .rubr::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--cat,var(--accent));flex:none}
+.tile{--cat:var(--accent)}
+.tile.c-screen{--cat:var(--c-screen)} .tile.c-doas{--cat:var(--c-doas)} .tile.c-useful{--cat:var(--c-useful)}
+.tile.c-carousel{--cat:var(--c-carousel)} .tile.c-case{--cat:var(--c-case)} .tile.c-exp{--cat:var(--c-exp)}
+.tile::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--cat)}
+.lg{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:12px;color:var(--muted);padding:4px 10px;border:1px solid var(--line);border-radius:999px}
+.lg i{width:9px;height:9px;border-radius:50%;display:block}
+button.lg{background:transparent;cursor:pointer;font-family:var(--f-mono)}
+button.lg:hover{border-color:var(--muted);color:var(--fg)}
+button.lg[aria-pressed="true"]{border-color:var(--fg);color:var(--fg);background:var(--panel-2)}
+.lg.reset{color:var(--fg)}
+.fcount{font-family:var(--f-mono);font-size:12px;color:var(--muted);align-self:center}
+.tile.today{border-color:var(--fg)}
+.tile .ttl{font-weight:600;font-size:15px;line-height:1.3;overflow-wrap:anywhere}
+.tile .meta{margin-top:auto;display:flex;flex-direction:column;gap:6px}
+.tile .kwrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tile .gname{font-family:var(--f-body);font-weight:600;font-size:13px}
+.gbtn{font:600 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);text-decoration:none;background:var(--accent-dim)}
+.gbtn:hover{background:var(--accent);color:#07090b}
+.ready.s-new{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.ready.s-wrk{background:rgba(201,162,74,.16);color:var(--wait)}
+.ready.s-pubd{background:transparent;border:1px solid var(--done);color:var(--muted)}
+.srow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.copy{font:500 11px var(--f-mono);letter-spacing:.04em;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.copy:hover{border-color:var(--accent);color:var(--accent)}
+.copy.ok{border-color:var(--work);color:var(--work)}
+.btn.ghost:disabled{opacity:.45;cursor:not-allowed}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cp{display:inline-block;width:12px;height:12px;flex:none;margin-left:2px}
+.cp.off{border-left:4px solid var(--wait);border-right:4px solid var(--wait);width:12px;box-sizing:border-box}
+.cp.on{width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:10px solid var(--work)}
+.tile .kwv{font:500 13px var(--f-mono);color:var(--fg)}
+.tile .kwv.none{color:var(--muted)}
+.steps{display:flex;flex-wrap:wrap;gap:5px}
+.step{font:500 11px var(--f-body);padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.step::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--line)}
+.step[aria-pressed="true"]{background:var(--accent-dim);border-color:var(--accent);color:var(--fg)}
+.step[aria-pressed="true"]::before{background:var(--accent)}
+.tile .acts{display:flex;gap:6px;flex-wrap:wrap}
+.btn{font:600 12px var(--f-body);padding:7px 10px;border-radius:6px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer}
+.btn:disabled{border-color:var(--line);color:var(--muted);cursor:default}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.btn.ghost[aria-pressed="true"]{border-color:var(--work);color:var(--work)}
+.note{font-size:12px;color:var(--muted);line-height:1.4}
+.lmsel{background:var(--panel-2);color:var(--fg);border:1px solid var(--line);border-radius:6px;font:500 12px var(--f-body);padding:3px 6px;max-width:100%;min-width:0}
+.lmsel.unset{color:var(--wait);border-color:rgba(201,162,74,.45)}
+.flash{display:inline-flex;align-items:center;gap:5px;font:500 11px var(--f-mono);color:var(--muted);cursor:pointer}
+.flash input{accent-color:var(--accent);margin:0}
+.lmtag{display:block;font:500 11px var(--f-mono);color:var(--muted);margin-top:4px;white-space:nowrap}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer}
+.chk input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.overlay{position:fixed;inset:0;background:rgba(3,5,6,.78);display:flex;align-items:center;justify-content:center;z-index:20;padding:calc(16px + env(safe-area-inset-top,0px)) max(16px, env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px))}
+.sheet{background:var(--panel);border:1px solid var(--line);border-radius:12px;max-width:620px;width:100%;max-height:100%;overflow:auto;padding:22px;display:flex;flex-direction:column;gap:14px}
+.sheet .sh-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.sheet h3{font-family:var(--f-display);font-weight:500;font-size:18px;margin:4px 0 0;text-wrap:balance}
+.sheet ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:10px}
+.sheet li{line-height:1.5}
+.sheet li .lab{font-family:var(--f-mono);font-size:11px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;display:block}
+.sheet .stage{color:var(--muted);font-style:italic}
+.post{white-space:pre-wrap;line-height:1.55;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:14px;overflow-wrap:anywhere}
+.post a{color:var(--accent)}
+.post s{color:var(--muted)}
+.refa{font:500 12px var(--f-body);color:var(--fg);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--panel-2);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.refa:hover{border-color:var(--accent);color:var(--accent)}
+button.ready{border:1px solid transparent;cursor:pointer}
+button.ready.s-rdy:hover{box-shadow:0 0 0 3px var(--accent-dim)}
+button.ready.s-pubd{border-color:var(--done)}
+button.ready.s-pubd:hover{color:var(--fg)}
+.stepswrap{display:flex;flex-direction:column;gap:4px}
+.stepswrap .slab{font:500 10px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.steps .step{border:0;background:transparent;padding:2px 6px 2px 0;border-radius:4px;font:500 12px var(--f-body);color:var(--muted);gap:4px}
+.steps .step::before{content:"○";width:auto;height:auto;background:none;border-radius:0;font:600 12px var(--f-mono);color:var(--muted)}
+.steps .step[aria-pressed="true"]{background:transparent;color:var(--fg)}
+.steps .step[aria-pressed="true"]::before{content:"✓";background:none;color:var(--accent)}
+.steps .step:hover{color:var(--fg)}
+.tile .acts{border-top:1px solid var(--line);padding-top:10px;align-items:center}
+.acts .open{font:600 12px var(--f-body);padding:5px 9px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);color:var(--fg);cursor:pointer}
+.acts .open:hover{border-color:var(--accent);color:var(--accent)}
+.acts .open.ok{border-color:var(--work);color:var(--work)}
+.acts .open:disabled{background:transparent;color:var(--muted);opacity:.55;cursor:default}
+.acts .open:disabled:hover{border-color:var(--line);color:var(--muted)}
+.acts .pubbtn{margin-left:auto;font:500 11px var(--f-mono);letter-spacing:.04em;padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.acts .pubbtn:disabled{opacity:.45;cursor:not-allowed}
+.acts .pubbtn.go{border-color:var(--work);color:var(--work)}
+.acts .pubbtn.go:hover{background:rgba(123,227,143,.12)}
+.keyhint{font:500 11px var(--f-mono);color:var(--muted);white-space:nowrap}
+.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:480px){.gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gal figure{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.gal img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:6px;border:1px solid var(--line);background:var(--panel-2)}
+.gal figcaption{display:flex;justify-content:space-between;align-items:center;gap:6px;font:500 11px var(--f-mono);color:var(--muted);min-width:0}
+.gal figcaption span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.close{flex:none;font:600 13px var(--f-body);background:transparent;border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:6px 12px;cursor:pointer}
+
+/* Pick: shoot days as rows of 4 slots (extras paler below) → add day → candidate pool with format filter, drag & drop */
+#pickRoot{display:flex;flex-direction:column;gap:12px}
+.psh{margin-top:14px}
+.shoot{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;--cat:var(--accent)}
+.shoot.sf-screen{--cat:var(--c-screen)} .shoot.sf-useful{--cat:var(--c-useful)} .shoot.sf-doas{--cat:var(--c-doas)} .shoot.sf-exp{--cat:var(--c-exp)} .shoot.sf-mix{--cat:var(--fg)}
+.shoot{border-top:3px solid var(--cat)}
+.shoot.past{opacity:.6}
+.shd{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.shd .when{display:flex;flex-direction:column;line-height:1}
+.shd .dd{font-family:var(--f-display);font-weight:700;font-size:24px;font-variant-numeric:tabular-nums}
+.shd .wd{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.1em}
+.shd .cnt{font:500 12px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums;margin-left:auto}
+.shd .cnt b{color:var(--fg);font-weight:500}
+.sgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;border-radius:8px}
+.sgrid.extra{opacity:.55}
+.sgrid.extra:hover,.sgrid.extra:focus-within{opacity:1}
+@media (max-width:760px){.sgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:440px){.sgrid{grid-template-columns:1fr}}
+.pool{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px;border-radius:10px;border:1px dashed transparent}
+@media (max-width:760px){.pool{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:440px){.pool{grid-template-columns:1fr}}
+.over{outline:2px dashed var(--accent);outline-offset:3px;background:var(--accent-dim)}
+.psec{font:500 10px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pcard{--cat:var(--c-exp);background:var(--panel-2);border:1px solid var(--line);border-top:3px solid var(--cat);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:7px;min-width:0;cursor:grab}
+.pcard.c-screen{--cat:var(--c-screen)} .pcard.c-doas{--cat:var(--c-doas)} .pcard.c-useful{--cat:var(--c-useful)} .pcard.c-case{--cat:var(--c-case)} .pcard.c-exp{--cat:var(--c-exp)}
+.pcard.drag{opacity:.4}
+.pcard.rej{opacity:.45;cursor:default}
+.phd{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pfm{font:500 10px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--cat)}
+.pcard .intile{font:500 10px var(--f-mono);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 6px}
+.pcard .pt{font-weight:600;font-size:13px;line-height:1.3;overflow-wrap:anywhere}
+.pcard .prefs{display:flex;flex-wrap:wrap;gap:4px}
+.pcard .refa{font-size:11px;padding:1px 7px}
+.noref{font:500 11px var(--f-mono);color:var(--wait)}
+.checks{display:flex;flex-wrap:wrap;gap:3px}
+.ck{font:500 10px var(--f-body);display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.ck::before{content:"";width:7px;height:7px;border-radius:50%;border:1.5px solid var(--muted);box-sizing:border-box}
+.ck.g::before{background:var(--work);border-color:var(--work)} .ck.y::before{background:var(--wait);border-color:var(--wait)} .ck.r::before{background:#ff6b6b;border-color:#ff6b6b}
+.ck.g,.ck.y,.ck.r{color:var(--fg)}
+.pacts{display:flex;flex-wrap:wrap;gap:4px;align-items:center;border-top:1px solid var(--line);padding-top:7px;margin-top:auto}
+.pacts.sub{border-top:0;padding-top:0;margin-top:0}
+.pacts .open{font:600 11px var(--f-body);padding:3px 8px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+.pacts .open.has{border-color:var(--work);color:var(--work)}
+.pacts .open:hover{border-color:var(--accent);color:var(--accent)}
+.pacts .open:disabled{opacity:.45;cursor:default}
+.ord{font:500 11px var(--f-mono);padding:3px 7px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.ord:hover{color:var(--fg);border-color:var(--muted)}
+.pacts input[type=date],.addshoot input[type=date]{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:6px;font:500 11px var(--f-mono);padding:3px 5px;color-scheme:dark;max-width:100%}
+.pacts .lmsel{font-size:11px;padding:2px 4px}
+.pslot{border:1px dashed var(--line);border-radius:8px;padding:14px;color:var(--muted);font-size:12px;display:grid;place-items:center;text-align:center;min-height:110px}
+.addshoot{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.addshoot .open{font:600 12px var(--f-body);padding:6px 12px;border-radius:6px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer}
+.addshoot .open:disabled{border-color:var(--line);color:var(--muted);cursor:default}
+.prej{align-self:flex-start;font:500 11px var(--f-mono);padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.sheet textarea{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;color:var(--fg);font:400 14px/1.55 var(--f-body);padding:12px;min-height:280px;resize:vertical;width:100%}
+
+/* Pipeline: stage counters (click = filter) + 14-day coverage strip of publish slots */
+.pipe{display:flex;flex-direction:column;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+@media (max-width:560px){.stages{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.stg{display:flex;flex-direction:column;gap:4px;align-items:flex-start;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;text-align:left;font:500 11px var(--f-body)}
+.stg b{font:700 22px var(--f-display);color:var(--fg);font-variant-numeric:tabular-nums;line-height:1.1}
+.stg[aria-pressed="true"]{background:var(--panel-2);border-color:var(--fg);color:var(--fg)}
+.stg.z b{color:var(--muted)}
+.sw{width:10px;height:10px;border-radius:3px;background:var(--st);flex:none;display:inline-block}
+.st-ready{--st:var(--st-ready)} .st-edited{--st:var(--st-edited)} .st-shot{--st:var(--st-shot)} .st-script{--st:var(--st-script)} .st-idea{--st:var(--st-idea)}
+.stg{border-left:4px solid var(--st)}
+.stg[aria-pressed="true"]{border-color:var(--st);border-left-width:4px}
+.stg .lab{display:flex;align-items:center;gap:6px}
+.cover{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:3px}
+@media (max-width:560px){.cover{grid-template-columns:repeat(7,minmax(0,1fr))}}
+.cd{display:flex;flex-direction:column;gap:3px;align-items:stretch;padding:5px 3px;border-radius:6px;font:500 10px var(--f-mono);color:var(--muted);min-width:0;text-align:center}
+.cd .n{font-variant-numeric:tabular-nums}
+.cd.slot{color:var(--fg)}
+.cd.today{outline:1px solid var(--fg)}
+.ci{display:flex;flex-direction:column;gap:3px;align-items:center;padding:4px 2px;border-radius:5px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer;--cat:var(--accent)}
+.ci:hover{border-color:var(--fg)}
+.ci{border:2px solid var(--st,var(--line));background:color-mix(in srgb, var(--st, transparent) 18%, var(--panel-2));flex-direction:row;justify-content:center}
+.ci .cdot{width:8px;height:8px;border-radius:50%;background:var(--cat);flex:none}
+.ci.c-screen{--cat:var(--c-screen)} .ci.c-doas{--cat:var(--c-doas)} .ci.c-useful{--cat:var(--c-useful)} .ci.c-carousel{--cat:var(--c-carousel)} .ci.c-case{--cat:var(--c-case)} .ci.c-exp{--cat:var(--c-exp)}
+.ci.empty{border-style:dashed;background:transparent;cursor:default;color:var(--muted);font-size:9px;padding:5px 2px}
+.ckey{display:flex;gap:12px;flex-wrap:wrap;font:500 10px var(--f-mono);color:var(--muted)}
+.ckey span{display:inline-flex;align-items:center;gap:5px}
+
+.tile.flash{animation:tflash 1.6s ease-out}
+@keyframes tflash{0%,30%{box-shadow:0 0 0 3px var(--fg)}100%{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){.tile.flash{animation:none;box-shadow:0 0 0 3px var(--fg)}}
+.cover-h{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font:500 12px var(--f-body);color:var(--muted)}
+.cover-h b{color:var(--fg);font-weight:600}
+.cover-h .warn{color:#ff8a8a}
+
+.sdate{background:var(--panel-2);color:var(--fg);border:1px solid var(--line);border-radius:6px;font:500 12px var(--f-mono);padding:4px 6px;color-scheme:dark}
+.shd .open{font:600 12px var(--f-body);padding:5px 10px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.shd .open.go{border-color:var(--work);color:var(--work)}
+.shd .open.go:hover{background:rgba(123,227,143,.12)}
+.shd .open:disabled{border-color:var(--line);color:var(--muted);opacity:.5;cursor:default}
+.ord.warn{border-color:#ff6b6b;color:#ff8a8a}
+.shoot.plan{border-top:3px dashed var(--line);background:transparent}
+
+</style>
+
+<div class="wrap">
+  <nav class="tabs" role="tablist" aria-label="Разделы">
+    <button role="tab" id="tabBtnFeed" aria-controls="tab-feed" aria-selected="true">Лента <span class="n" id="nFeed"></span></button>
+    <button role="tab" id="tabBtnPick" aria-controls="tab-pick" aria-selected="false">Отбор <span class="n" id="nPick"></span></button>
+    <button role="tab" id="tabBtnIdeas" aria-controls="tab-ideas" aria-selected="false">Отложенные идеи <span class="n" id="nIdeas"></span></button>
+    <button role="tab" id="tabBtnReleased" aria-controls="tab-released" aria-selected="false">Выпущено <span class="n" id="nRel"></span></button>
+  </nav>
+
+  <div class="tab" id="tab-feed" role="tabpanel" aria-labelledby="tabBtnFeed">
+    <header>
+      <div>
+        <div class="eyebrow">NEW BLENDER · сетка 10.11–22.11</div>
+        <h1>Лента выходов</h1>
+        <p class="lead">Плитка — один выход. Нажимай на этапы, когда они готовы: голубой значит готово. «Сценарий» раскрывает текст для съёмки.</p>
+      </div>
+      <div class="pipe" id="pipe"></div>
+      <div class="legend" id="legend"></div>
+    </header>
+    <div class="feed" id="feed"><p class="note">Загружаю ленту…</p></div>
+  </div>
+
+  <div class="tab" id="tab-released" role="tabpanel" aria-labelledby="tabBtnReleased" hidden>
+    <header>
+      <div>
+        <div class="eyebrow">NEW BLENDER · архив</div>
+        <h1>Выпущено</h1>
+        <p class="lead">Сюда уходят плитки после нажатия «Готов к публикации». Свежие сверху. Нажатие на «Опубликовано» вернёт плитку в ленту.</p>
+      </div>
+    </header>
+    <div class="feed" id="released"><p class="note">Пока ничего не вышло.</p></div>
+  </div>
+
+  <div class="tab" id="tab-pick" role="tabpanel" aria-labelledby="tabBtnPick" hidden>
+    <header>
+      <div>
+        <div class="eyebrow">NEW BLENDER · отбор на съёмку</div>
+        <h1>Отбор кандидатов</h1>
+        <p class="lead">Сверху — съёмочные дни: строка на 4 ролика, лишние ниже и бледнее. Ниже — кандидаты, их перетаскиваешь в день. Фильтр по формату действует на оба блока. Светофор у кандидатов и в окне сценария — четыре проверки: 1-я секунда, что за словом, хочется сохранить, хочется переслать.</p>
+      </div>
+    </header>
+    <div class="legend" id="pfLegend"></div>
+    <div id="pickRoot"><p class="note">Загружаю…</p></div>
+  </div>
+
+  <div class="tab" id="tab-ideas" role="tabpanel" aria-labelledby="tabBtnIdeas" hidden>
+    <header>
+      <div>
+        <div class="eyebrow">NEW BLENDER · бэклог тем</div>
+        <h1>Отложенные идеи</h1>
+        <p class="lead">Темы для рилсов и постов, которые ждут своей очереди. Когда идея уходит в план, меняй статус. Новые идеи можно добавить внизу или просто написать Claude.</p>
+      </div>
+      <div>
+        <div class="filters" id="filters" role="group" aria-label="Фильтр по статусу"></div>
+        <div class="filters" id="fmtFilters" role="group" aria-label="Фильтр по формату"></div>
+      </div>
+    </header>
+
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Идея</th><th>Рубрика</th><th>Формат</th><th>Что показать</th><th>Статус</th><th>Добавлено</th></tr></thead>
+        <tbody id="rows"><tr><td class="empty" colspan="6">Загружаю идеи…</td></tr></tbody>
+      </table>
+    </div>
+
+    <form class="add" id="addForm">
+      <h2>Добавить идею</h2>
+      <div class="row">
+        <div class="field"><label for="fTitle">Идея</label><input id="fTitle" required maxlength="120" placeholder="Например: жидкость без симуляции"></div>
+        <div class="field"><label for="fRub">Рубрика</label>
+          <select id="fRub">
+            <option>Фишка Blender</option><option>3D-печать</option><option>Разбор студента</option><option>Коммерция / заказы</option><option>Личное</option><option>Без рубрики</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="fFmt">Формат</label><select id="fFmt"></select></div>
+        <div class="field"><label for="fLm">Что получит зритель по слову</label>
+          <select id="fLm">
+            <option value="blend">.blend-файл сцены</option><option value="nodes">Нод-сетап / шейдер</option><option value="stl">STL для печати</option><option value="check">Чек-лист / разбор</option><option value="none">Без лид-магнита</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label for="fDesc">Что показать</label><textarea id="fDesc" maxlength="600" placeholder="Пара фраз, чтобы через неделю было понятно, о чём это"></textarea></div>
+      <button type="submit" id="fBtn">Добавить</button>
+    </form>
+  </div>
+
+
+  <footer>
+    <div class="status" id="status">Демо-версия контент-плана.</div>
+    <div>В рабочей версии сценарии, кодовые слова и новые выходы Claude дописывает сюда из чата.</div>
+  </footer>
+</div>
+
+<script>
+/* Демо-режим: данные зашиты в страницу, изменения живут до перезагрузки */
+(() => {
+  const STORE = {"feed": {"d0524": {"cat": "screen", "date": "2026-05-24", "fmt": "reel", "note": "50 373 просмотра · 2 640 лайков · 454 отправки. CTA «бегом на канал» — без ссылки и слова, сколько дошло до YouTube, не измерить.\nВ новой системе: слово «анимация» → ссылка на 1-й урок + метка в ChatPlace.", "pub": true, "pubDate": "2026-05-24", "s_edit": true, "s_script": true, "s_shoot": true, "topic": "Мини-курс по анимации (анонс)"}, "d0624": {"cat": "screen", "date": "2026-06-24", "fmt": "reel", "note": "175 749 просмотров · 6 427 лайков · 99 комментов · 1 793 отправки (1,0%). Хит аккаунта.\nКодового слова не было: охват ушёл, не оставив ни одного лида. В новой системе: слово «скульпт» → .blend + путь на консультацию.", "pub": true, "pubDate": "2026-06-24", "s_edit": true, "s_script": true, "s_shoot": true, "topic": "Скульптинг — дело тонкое"}, "d0808": {"cat": "doas", "date": "2026-08-08", "fmt": "reel", "note": "50 469 просмотров · 1 276 лайков · 515 отправок (1,0%). В комментах спрашивают про принтер и толщину стенки — готовый спрос на PRO PRINT.\nПоследний рилс перед паузой. Слово «лампа» → STL + презентация курса по печати.", "pub": true, "pubDate": "2026-08-08", "s_edit": true, "s_script": true, "s_shoot": true, "topic": "Быстрые решения с геометрией (лампа для печати)"}, "d1110": {"cat": "screen", "date": "2026-11-10", "desc": "Густая жидкость обтекает объект без кэша и запекания: модификаторы + один шейдер. В рилсе результат и логика, сама сцена — за словом.", "fmt": "reel", "igPost": {"text": "Пиши «жидкость» в комментах – пришлю сцену в .blend 👇\n\nЖидкость без единой симуляции: модификаторы + один шейдер. Двигаешь объект — она тянется следом, и никакого запекания 🔥\n\n#blender #3d #blender3d #3dмоделирование"}, "kw": "жидкость", "lm": "blend", "note": "Путь после слова: файл сцены → вопрос «ты с нуля или уже в Blender?» → новичкам мини-курс на YouTube, остальным — запись на бесплатную консультацию.\nИсточник идеи: YouTube «Жидкость без симуляции в BLENDER 5.1».", "s_script": true, "s_shoot": true, "script": "[Хук · 0–2 с] Это не симуляция жидкости. И считается она не часами, а за минуту. (сверху готовый рендер: густая жидкость обтекает флакон)\n[Боль] Обычно жидкость в Blender — это часы запекания и вылеты на слабом железе.\n[Поворот] А здесь нет ни одной симуляции. Только модификаторы и один шейдер. (вьюпорт: стек модификаторов, листаю)\n[Результат] Двигаю объект — и жидкость тянется следом. Без кэша. (двигаю флакон во вьюпорте)\n[CTA] Пиши в комменты «жидкость» — пришлю эту сцену в .blend со всеми настройками.", "topic": "Жидкость без симуляции"}, "d1112": {"cat": "doas", "date": "2026-11-12", "desc": "Узор Voronoi выдавливает геометрию, толщина стенки 2 мм — и в печать. Вход в курс PRO PRINT.", "fmt": "reel", "igPost": {"text": "Пиши «кашпо» в комментах – пришлю STL для печати 👇\n\nОдна текстура вместо скульптинга, стенка 2 мм — и в принтер. Смоделировал за 10 минут, напечатал за ночь 🌵\n\n#blender #3dпечать #bambulab #3dprinting"}, "kw": "кашпо", "lm": "stl", "note": "Путь после слова: STL → «хочешь научиться делать свои модели для печати?» → презентация PRO PRINT → запись на созвон.\nИнсайт из его же коммента под лампой 08.08: «ставил 3 мм, сделал бы 2 или 1,5».", "s_script": true, "s_shoot": true, "script": "[Хук · 0–2 с] Это кашпо я смоделировал за 10 минут. А напечатал за ночь. (в руке готовое кашпо, кручу)\n[Поворот] Узор — это не скульптинг. Одна текстура, которая выдавливает геометрию. (вьюпорт: Voronoi → Displace)\n[Нюанс] А главное перед печатью — толщина стенки. На лампе я ставил 3 мм, сейчас беру 2: тоньше порвётся, толще уйдёт куча пластика. (Solidify, цифра крупно)\n[Результат] (таймлапс печати → кашпо с цветком)\n[CTA] Пиши «кашпо» — пришлю STL, и можешь печатать хоть сегодня.", "topic": "Кашпо за 10 минут: из Blender на принтер"}, "d1114": {"cat": "useful", "date": "2026-11-14", "desc": "Разбор работы студентки: цветовое пространство, экспозиция, свет. До/после + чек-лист за словом + бесплатный разбор своей работы.", "fmt": "reel", "kw": "разбор", "lm": "check", "note": "Путь после слова: чек-лист → кнопка «Разобрать мою работу» → запись на консультацию (это главный путь к продаже).\nИсточник: TG-пост «Внутри курса: разбор домашней работы» (02.08).", "s_script": true, "script": "[Хук · 0–2 с] Почему твоё стекло выглядит как пластик? (слайдер до/после рендера студентки)\n[Почему] Это работа моей студентки. Модель хорошая — подвело всё вокруг неё.\n[1] Цветовое пространство: Khronos PBR Neutral вместо стандартного. (переключаю, картинка меняется)\n[2] Экспозиция — стекло любит запас по светам. (ползунок)\n[3] И два источника света в противоход, чтобы появились блики по краю. (схема света)\n[Результат] (после, медленный облёт)\n[CTA] Пиши «разбор» — пришлю чек-лист по стеклу. А если хочешь, чтобы я так же разобрал твою работу, там же можно записаться на бесплатную консультацию.", "topic": "Почему твоё стекло похоже на пластик"}, "d1115": {"cat": "carousel", "date": "2026-11-15", "desc": "Карусель из работ студентов NEW BLENDER 2.0 (парфюм, DualSense, синематик Riot, ткани, жидкость). Последний слайд — что нужно, чтобы собрать такое же портфолио.", "fmt": "carousel", "kw": "портфолио", "lm": "check", "note": "Вторая жизнь для работ с Behance-подборки. Путь после слова: подборка работ + программа → консультация.", "topic": "12 работ за 60 дней: что делают мои студенты"}, "d1117": {"cat": "screen", "date": "2026-11-17", "desc": "Фактура металла через ноды: царапины, неровный блик. В рилсе до/после и логика, нод-сетап — за словом.", "fmt": "reel", "kw": "металл", "lm": "nodes", "note": "Источник: YouTube «Реалистичная фактура металла в Blender». Слот после «жидкости» — проверить, держится ли 10K+ у второй фишки подряд по шейдингу.", "topic": "Металл, который не отличить от фото"}, "d1119": {"cat": "doas", "date": "2026-11-19", "desc": "Логотип из SVG → объём → печать двумя цветами. Повод переслать: «сделай нам такие для команды».", "fmt": "reel", "kw": "брелок", "lm": "stl", "note": "Хук на результат в руке. Кандидат на отправки — узнаваемый бытовой предмет.", "topic": "Брелок с твоим логотипом за 15 минут"}, "d1122": {"cat": "carousel", "date": "2026-11-22", "desc": "Карусель по лекции «Почему ты не прогрессируешь в 3D». Каждая ошибка — слайд с примером до/после.", "fmt": "carousel", "kw": "ошибки", "lm": "check", "note": "Источник: YouTube-видео 9,3K. Путь: чек-лист → мини-курс для новичков / консультация.", "topic": "5 ошибок, из-за которых ты не растёшь в 3D"}}, "ideas": {"ai-3d": {"added": "2026-11-04", "desc": "Эксперимент: один и тот же предметный рендер в Blender и в нейросети — где 3D незаменим.", "fmt": "screen", "lm": "check", "rubric": "Без рубрики", "status": "wait", "title": "Нейронки заменят 3D? Проверяю на одном заказе"}, "glass": {"added": "2026-11-04", "checks": {"behind": "y", "first": "g", "save": "g", "share": "y"}, "desc": "До/после, 3 правки. За словом — чек-лист и кнопка «разобрать мою работу» → консультация.", "fmt": "screen", "lm": "check", "pick": "useful", "pickOrder": 3, "pickSt": "cand", "rubric": "Разбор студента", "shoot": "s1107", "status": "plan", "tile": "d1114", "title": "Стекло, которое выглядит как пластик (разбор студентки)"}, "kashpo": {"added": "2026-11-04", "checks": {"behind": "g", "first": "g", "save": "g", "share": "g"}, "desc": "Текстура выдавливает узор, стенка 2 мм. За словом — STL. Вход в PRO PRINT.", "fmt": "doas", "lm": "stl", "pick": "doas", "pickOrder": 2, "pickSt": "cand", "rubric": "3D-печать", "shoot": "s1107", "status": "plan", "tile": "d1112", "title": "Кашпо Voronoi: из Blender на принтер"}, "keychain": {"added": "2026-11-04", "checks": {"behind": "g", "first": "g", "share": "g"}, "desc": "SVG → объём → двухцветная печать. За словом — STL-шаблон под свой логотип.", "fmt": "doas", "lm": "stl", "pick": "doas", "pickOrder": 5, "pickSt": "cand", "rubric": "3D-печать", "status": "plan", "tile": "d1119", "title": "Брелок с логотипом за 15 минут"}, "liquid": {"added": "2026-11-04", "checks": {"behind": "g", "first": "g", "save": "g", "share": "y"}, "desc": "Из YouTube-урока «Жидкость без симуляции в BLENDER 5.1». За словом — .blend сцены: без неё не повторить стек модификаторов.", "fmt": "screen", "lm": "blend", "pick": "screen", "pickOrder": 1, "pickSt": "cand", "rubric": "Фишка Blender", "shoot": "s1107", "status": "plan", "tile": "d1110", "title": "Жидкость без симуляции"}, "metal": {"added": "2026-11-04", "checks": {"behind": "g", "first": "g", "save": "g", "share": "y"}, "desc": "Из урока «Реалистичная фактура металла». За словом — нод-сетап.", "fmt": "screen", "lm": "nodes", "pick": "screen", "pickOrder": 4, "pickSt": "cand", "rubric": "Фишка Blender", "shoot": "s1107", "status": "plan", "tile": "d1117", "title": "Металл, который не отличить от фото"}, "orders": {"added": "2026-11-04", "desc": "Из видео «Заработок в 3D — как искать заказы» (27K). Горячий смысл — деньги. Ведёт прямо на консультацию.", "fmt": "head", "lm": "check", "rubric": "Коммерция / заказы", "status": "wait", "title": "Где 3D-художнику искать первые заказы"}, "paint-drip": {"added": "2026-11-04", "desc": "Из урока «Эффект стекающей краски». Вау в 1-ю секунду, за словом — нод-сетап.", "fmt": "screen", "lm": "nodes", "pick": "screen", "pickOrder": 6, "pickSt": "cand", "rubric": "Фишка Blender", "status": "wait", "title": "Стекающая краска шейдером"}, "quake": {"added": "2026-11-04", "desc": "Из урока «Дрожь земли в Blender». Подходит для синематик-хука.", "fmt": "screen", "lm": "blend", "rubric": "Фишка Blender", "status": "wait", "title": "Дрожь земли: анимированный эффект"}, "rtx": {"added": "2026-11-04", "desc": "Частый вопрос на консультациях (требования есть на сайте). За словом — сборки ПК по бюджету.", "fmt": "head", "lm": "check", "rubric": "Личное", "status": "wait", "title": "Какое железо нужно для 3D в 2026"}, "wires": {"added": "2026-11-04", "desc": "Из урока «Анимация мерцающих проводов». Неон в темноте — результат виден сразу.", "fmt": "screen", "lm": "blend", "pick": "screen", "pickOrder": 7, "pickSt": "cand", "rubric": "Фишка Blender", "status": "wait", "title": "Мерцающие провода"}}, "shoots": {"s1107": {"date": "2026-11-07", "fmt": "mix", "done": false}}};
+  const subs = {};
+  let n = 0;
+  const snap = c => ({docs: Object.entries(STORE[c] || {}).map(([id, d]) => ({id, data: () => JSON.parse(JSON.stringify(d))}))});
+  const fire = c => setTimeout(() => (subs[c] || []).forEach(cb => cb(snap(c))), 0);
+  const split = p => { const i = p.indexOf("/"); return [p.slice(0, i), p.slice(i + 1)]; };
+  const doc = p => { const [c, id] = split(p); STORE[c] = STORE[c] || {}; return {
+    async get(){ return {id, exists: !!STORE[c][id], data: () => STORE[c][id]}; },
+    async set(d){ STORE[c][id] = {...d}; fire(c); },
+    async update(d){ STORE[c][id] = {...(STORE[c][id] || {}), ...d}; fire(c); },
+    async delete(){ delete STORE[c][id]; fire(c); }
+  }; };
+  const db = {
+    doc,
+    collection(c){ return {
+      onSnapshot(cb){ (subs[c] = subs[c] || []).push(cb); setTimeout(() => cb(snap(c)), 0); return () => {}; },
+      async add(d){ const id = "demo" + (++n) + Date.now().toString(36); STORE[c] = STORE[c] || {}; STORE[c][id] = {...d}; fire(c); return {id}; },
+      doc(id){ return doc(c + "/" + id); }
+    }; }
+  };
+  window.claude = {use: async name => name === "db" ? db : null};
+})();
+</script>
+<script>
+/* ---------- tabs ---------- */
+const TABS = {feed:["tabBtnFeed","tab-feed"], released:["tabBtnReleased","tab-released"], pick:["tabBtnPick","tab-pick"], ideas:["tabBtnIdeas","tab-ideas"]};
+function showTab(name){
+  for (const [k,[b,p]] of Object.entries(TABS)){
+    const on = k === name;
+    document.getElementById(b).setAttribute("aria-selected", String(on));
+    document.getElementById(p).hidden = !on;
+  }
+  try { localStorage.setItem("nb-tab", name); } catch(e){}
+}
+document.getElementById("tabBtnFeed").addEventListener("click", () => showTab("feed"));
+document.getElementById("tabBtnIdeas").addEventListener("click", () => showTab("ideas"));
+document.getElementById("tabBtnReleased").addEventListener("click", () => showTab("released"));
+document.getElementById("tabBtnPick").addEventListener("click", () => showTab("pick"));
+(() => {
+  let start = ["#ideas","#released","#pick"].includes(location.hash) ? location.hash.slice(1) : null;
+  if (!start){ try { start = localStorage.getItem("nb-tab"); } catch(e){} }
+  showTab(TABS[start] ? start : "feed");
+})();
+function setStatus(msg){ document.getElementById("status").textContent = msg; }
+let db = null;
+
+/* ---------- feed ---------- */
+const WD = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
+const CATS = {
+  screen:["Фишка Blender","Вт"], doas:["Из 3D в печать","Чт"], useful:["Разбор студента","Сб"],
+  carousel:["Карусель","Вс"], case:["Коммерция",""], exp:["Эксперимент",""]
+};
+const STEPS = {
+  reel:[["s_script","Сценарий"],["s_shoot","Съёмка"],["s_edit","Монтаж"],["s_guide","Файл"],["s_cp","ChatPlace"]],
+  carousel:[["s_script","Текст"],["s_edit","Слайды"],["s_guide","Гайд"],["s_cp","ChatPlace"]]
+};
+/* what the keyword delivers: label, step name (null = no keyword/ChatPlace) */
+const LM = {
+  blend:[".blend-файл сцены","Файл"], nodes:["Нод-сетап / шейдер","Сетап"], stl:["STL для печати","STL"],
+  check:["Чек-лист / разбор","Чек-лист"], none:["Без лид-магнита",null]
+};
+function stepsFor(it){
+  const base = STEPS[it.fmt === "carousel" ? "carousel" : "reel"];
+  const lm = LM[it.lm];
+  if (lm && !lm[1]) return base.filter(([k]) => k !== "s_guide" && k !== "s_cp");
+  return base.map(([k,l]) => k === "s_guide" && lm ? [k, lm[1]] : [k,l]);
+}
+function lmSelect(id, val){
+  const sel = document.createElement("select"); sel.id = id; sel.className = "lmsel" + (LM[val] ? "" : " unset");
+  const o0 = document.createElement("option"); o0.value = ""; o0.textContent = "не выбрано"; sel.appendChild(o0);
+  for (const [k,[l]] of Object.entries(LM)){ const o = document.createElement("option"); o.value = k; o.textContent = l; if (k === val) o.selected = true; sel.appendChild(o); }
+  return sel;
+}
+let feed = []; let feedLoaded = false;
+function todayStr(){ const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+let catFilter = null;
+try { const v = localStorage.getItem("nb-cat"); if (v && CATS[v]) catFilter = v; } catch(e){}
+function renderLegend(){
+  const box = document.getElementById("legend"); box.textContent = "";
+  for (const [k,[l,d]] of Object.entries(CATS)){
+    const b = document.createElement("button"); b.type = "button"; b.className = "lg"; b.id = "cat-" + k;
+    b.setAttribute("aria-pressed", String(catFilter === k));
+    const i = document.createElement("i"); i.style.background = "var(--c-" + k + ")";
+    b.append(i, l + (d ? " · " + d : ""));
+    b.addEventListener("click", () => setCat(catFilter === k ? null : k));
+    box.appendChild(b);
+  }
+  if (catFilter){
+    const r = document.createElement("button"); r.type = "button"; r.className = "lg reset"; r.id = "cat-all";
+    r.textContent = "× Все форматы"; r.addEventListener("click", () => setCat(null));
+    box.appendChild(r);
+  }
+}
+function setCat(k){
+  catFilter = k;
+  try { if (k) localStorage.setItem("nb-cat", k); else localStorage.removeItem("nb-cat"); } catch(e){}
+  renderLegend(); renderFeed();
+}
+renderLegend();
+function makeTile(it, t){
+  const steps = stepsFor(it);
+  const tile = document.createElement("article"); tile.className = "tile c-" + (CATS[it.cat] ? it.cat : "exp"); tile.id = "tile-" + it.id;
+  if (it.date === t && !it.pub) tile.classList.add("today");
+  if (it.pub) tile.classList.add("pub");
+  const d = new Date(it.date + "T12:00:00");
+  const top = document.createElement("div"); top.className = "top";
+  const when = document.createElement("div"); when.className = "when";
+  const dd = document.createElement("span"); dd.className = "dd";
+  dd.textContent = isNaN(d) ? it.date : String(d.getDate()).padStart(2,"0")+"."+String(d.getMonth()+1).padStart(2,"0");
+  const wd = document.createElement("span"); wd.className = "wd";
+  wd.textContent = (isNaN(d) ? "" : WD[d.getDay()]) + (it.date === t && !it.pub ? " · сегодня" : "");
+  when.append(dd, wd);
+  const fmt = document.createElement("span"); fmt.className = "fmt" + (it.trial ? " trial" : "");
+  fmt.textContent = it.fmt === "carousel" ? "Карусель" : (it.trial ? "Рилс · пробный" : "Рилс");
+  top.append(when, fmt);
+  const rub = document.createElement("div"); rub.className = "rubr"; rub.textContent = (CATS[it.cat] || ["Без формата"])[0];
+  const ttl = document.createElement("div"); ttl.className = "ttl"; ttl.textContent = it.topic || "";
+  tile.append(top, rub, ttl);
+  const doneN = steps.filter(([k]) => it[k]).length, allDone = doneN === steps.length;
+  const stt = it.pub ? ["pubd","Опубликовано"] : allDone ? ["rdy","Готов к публикации"] : doneN ? ["wrk","В работе"] : ["new","Не начато"];
+  const clickable = it.pub || allDone;
+  const rd = document.createElement(clickable ? "button" : "div"); rd.className = "ready s-" + stt[0]; rd.textContent = stt[1];
+  if (clickable){
+    rd.type = "button"; rd.id = "pub-" + it.id;
+    rd.title = it.pub ? "Вернуть в ленту" : "Нажми, когда опубликуешь — плитка уйдёт во «Выпущено»";
+    rd.addEventListener("click", () => setField(it.id, it.pub ? {pub:false} : {pub:true, pubDate: todayStr()}));
+  }
+  if (it.folder && !it.pub){
+    const srow = document.createElement("div"); srow.className = "srow";
+    const cb = document.createElement("button"); cb.type = "button"; cb.className = "copy"; cb.id = "copy-" + it.id;
+    cb.textContent = "Скопировать путь"; cb.title = "Путь к папке этого ролика — вставь в Finder через ⌘⇧G";
+    cb.addEventListener("click", () => copyPath(it.folder, cb));
+    const hint = document.createElement("span"); hint.className = "keyhint"; hint.textContent = "Finder → ⌘⇧G";
+    srow.append(rd, cb, hint); tile.appendChild(srow);
+  } else tile.appendChild(rd);
+  const txt = it.desc;
+  if (txt && !it.pub){ const n = document.createElement("div"); n.className = "note"; n.textContent = txt; tile.appendChild(n); }
+  const meta = document.createElement("div"); meta.className = "meta";
+  if (it.drive){
+    const dr = document.createElement("div"); dr.className = "kwrow";
+    const dl = document.createElement("span"); dl.className = "wd"; dl.textContent = "файлы";
+    const da = document.createElement("a"); da.className = "gbtn"; da.id = "drive-" + it.id; da.href = it.drive; da.target = "_blank"; da.rel = "noopener";
+    da.textContent = "Google Диск ↗"; da.title = "Итоги этого выхода в папке проекта на Google Диске – открывается и с телефона";
+    dr.append(dl, da); meta.appendChild(dr);
+  }
+  if (it.guideTitle){
+    const gr = document.createElement("div"); gr.className = "kwrow";
+    const gl = document.createElement("span"); gl.className = "wd"; gl.textContent = "за словом";
+    const gv = document.createElement("span"); gv.className = "kwv gname"; gv.textContent = "«" + it.guideTitle + "»";
+    gr.append(gl, gv);
+    if (it.guideUrl){
+      const ga = document.createElement("a"); ga.className = "gbtn"; ga.href = it.guideUrl; ga.target = "_blank"; ga.rel = "noopener";
+      ga.textContent = "Открыть PDF"; gr.appendChild(ga);
+    }
+    meta.appendChild(gr);
+  }
+  if (Array.isArray(it.refs) && it.refs.length){
+    const rr = document.createElement("div"); rr.className = "kwrow";
+    const rl = document.createElement("span"); rl.className = "wd"; rl.textContent = "рефы";
+    rr.appendChild(rl);
+    for (const r of it.refs){
+      if (!r || !/^https?:\/\//.test(String(r.url || ""))) continue;
+      const a = document.createElement("a"); a.className = "refa"; a.href = r.url; a.target = "_blank"; a.rel = "noopener";
+      let lab = r.label; if (!lab){ try { lab = new URL(r.url).hostname.replace(/^www\./, ""); } catch(e){ lab = "ссылка"; } }
+      a.textContent = lab + " ↗"; a.title = r.url; rr.appendChild(a);
+    }
+    meta.appendChild(rr);
+  }
+  const kwr = document.createElement("div"); kwr.className = "kwrow";
+  const kl = document.createElement("span"); kl.className = "wd"; kl.textContent = "слово";
+  const kv = document.createElement("span"); kv.className = "kwv" + (it.kw ? "" : " none"); kv.textContent = it.kw ? "«" + it.kw + "»" : "не выбрано";
+  kwr.append(kl, kv);
+  if (it.kw && typeof it.cpOn === "boolean"){
+    const ci = document.createElement("span"); ci.className = "cp " + (it.cpOn ? "on" : "off");
+    ci.setAttribute("role","img"); ci.setAttribute("aria-label", it.cpOn ? "Автоматизация работает" : "Автоматизация на паузе");
+    ci.title = it.cpOn ? "ChatPlace: работает" : "ChatPlace: на паузе";
+    kwr.appendChild(ci);
+  }
+  meta.appendChild(kwr); tile.appendChild(meta);
+  const st = document.createElement("div"); st.className = "steps";
+  for (const [k, label] of steps){
+    const b = document.createElement("button"); b.type = "button"; b.className = "step";
+    b.id = "st-" + it.id + "-" + k;
+    b.setAttribute("aria-pressed", String(!!it[k])); b.textContent = label;
+    b.addEventListener("click", () => setField(it.id, {[k]: !it[k]}));
+    st.appendChild(b);
+  }
+  const sw = document.createElement("div"); sw.className = "stepswrap";
+  const sl = document.createElement("span"); sl.className = "slab"; sl.textContent = "Этапы";
+  sw.append(sl, st); tile.appendChild(sw);
+  const acts = document.createElement("div"); acts.className = "acts";
+  const sb = document.createElement("button"); sb.type = "button"; sb.className = "open";
+  sb.textContent = (it.fmt === "carousel" ? "Текст" : "Сценарий") + " ↗";
+  if (!it.script){ sb.disabled = true; sb.title = "Пока нет"; }
+  sb.addEventListener("click", () => openScript(it));
+  const postBtn = (kind, label) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "open"; b.id = kind + "-" + it.id;
+    const p = it[kind + "Post"];
+    b.textContent = label + " ↗";
+    if (!p || !p.text){ b.disabled = true; b.title = "Пока нет"; }
+    b.addEventListener("click", () => openPost(it, kind));
+    return b;
+  };
+  acts.append(sb, postBtn("tg", "TG"), postBtn("ig", "Инст"));
+  if (it.tgPost && it.tgPost.text){
+    const qc = document.createElement("button"); qc.type = "button"; qc.className = "open"; qc.id = "tgcopy-" + it.id;
+    qc.textContent = "⧉ TG"; qc.title = "Скопировать TG-пост со ссылками";
+    qc.addEventListener("click", () => copyPost(String(it.tgPost.text), qc, "⧉ TG"));
+    acts.appendChild(qc);
+  }
+  tile.appendChild(acts);
+  return tile;
+}
+async function copyPath(path, btn){
+  let ok = false;
+  try { await navigator.clipboard.writeText(path); ok = true; } catch(e){}
+  if (!ok){
+    try {
+      const ta = document.createElement("textarea"); ta.value = path; ta.setAttribute("readonly",""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); ta.remove();
+    } catch(e){}
+  }
+  if (ok){
+    btn.textContent = "Скопировано ✓"; btn.classList.add("ok");
+    setStatus("Путь скопирован. В Finder: ⌘⇧G → вставить → Enter.");
+    setTimeout(() => { btn.textContent = "Скопировать путь"; btn.classList.remove("ok"); }, 2500);
+  } else setStatus("Не удалось скопировать. Путь: " + path);
+}
+function renderFeed(){
+  const root = document.getElementById("feed"), rel = document.getElementById("released");
+  root.textContent = ""; rel.textContent = "";
+  const t = todayStr();
+  const pass = x => !catFilter || x.cat === catFilter;
+  const allOpen = feed.filter(x => !x.pub).length;
+  const open = feed.filter(x => !x.pub && pass(x) && (!stageFilter || stageOf(x) === stageFilter)).sort((a,b) => String(a.date).localeCompare(String(b.date)));
+  const done = feed.filter(x => x.pub && pass(x)).sort((a,b) => String(b.pubDate || b.date).localeCompare(String(a.pubDate || a.date)));
+  if (!open.length){
+    const p = document.createElement("p"); p.className = "note";
+    p.textContent = !feedLoaded ? (db ? "Загружаю ленту…" : "Лента появится, когда страница подключится к хранилищу.") : ((catFilter || stageFilter) && allOpen ? "Под этот фильтр впереди ничего нет." : "Все выходы опубликованы. Попроси Claude добавить новые из сетки.");
+    root.appendChild(p);
+  }
+  for (const it of open) root.appendChild(makeTile(it, t));
+  if (!done.length){ const p = document.createElement("p"); p.className = "note"; p.textContent = catFilter ? "В этом формате пока ничего не вышло." : "Пока ничего не вышло."; rel.appendChild(p); }
+  for (const it of done) rel.appendChild(makeTile(it, t));
+  document.getElementById("nFeed").textContent = feedLoaded ? String(open.length) : "";
+  document.getElementById("nRel").textContent = feedLoaded ? String(done.length) : "";
+  renderPipe();
+}
+async function setField(id, patch){
+  const it = feed.find(x => x.id === id); if (it) Object.assign(it, patch); renderFeed();
+  if (!db){ setStatus("Хранилище недоступно: отметка не сохранится."); return; }
+  try { await db.doc("feed/" + id).update(patch); setStatus(patch.pub === true ? "Перенесено во «Выпущено»." : patch.pub === false ? "Вернул в ленту." : "Сохранено."); }
+  catch(e){ setStatus("Не удалось сохранить. Попробуй ещё раз."); }
+}
+let lastFocus = null;
+function openScript(it){
+  lastFocus = document.activeElement;
+  const ov = document.createElement("div"); ov.className = "overlay"; ov.id = "ov";
+  const sh = document.createElement("div"); sh.className = "sheet"; sh.setAttribute("role","dialog"); sh.setAttribute("aria-modal","true"); sh.setAttribute("aria-labelledby","shTitle");
+  const top = document.createElement("div"); top.className = "sh-top";
+  const hd = document.createElement("div");
+  const ey = document.createElement("div"); ey.className = "eyebrow"; ey.textContent = (it.rub || "") + (it.kw ? " · «" + it.kw + "»" : "");
+  const h = document.createElement("h3"); h.id = "shTitle"; h.textContent = it.topic || "";
+  hd.append(ey, h);
+  const cl = document.createElement("button"); cl.type = "button"; cl.className = "close"; cl.textContent = "Закрыть";
+  cl.addEventListener("click", closeScript);
+  top.append(hd, cl);
+  const ol = document.createElement("ol");
+  for (const raw of String(it.script).split("\n")){
+    const line = raw.trim(); if (!line) continue;
+    const li = document.createElement("li");
+    const m = line.match(/^\[([^\]]+)\]\s*(.*)$/);
+    let body = line;
+    if (m){ const lab = document.createElement("span"); lab.className = "lab"; lab.textContent = m[1]; li.appendChild(lab); body = m[2]; }
+    for (const part of body.split(/(\([^)]*\))/)){
+      if (!part) continue;
+      if (/^\(.*\)$/.test(part)){ const s = document.createElement("span"); s.className = "stage"; s.textContent = part; li.appendChild(s); }
+      else li.appendChild(document.createTextNode(part));
+    }
+    ol.appendChild(li);
+  }
+  sh.append(top, ol); ov.appendChild(sh);
+  ov.addEventListener("click", e => { if (e.target === ov) closeScript(); });
+  document.body.appendChild(ov); cl.focus();
+}
+/* post text: plain text; links [label](https://...), ~~strike~~, **bold** */
+const LINK_RE = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+const TOK_RE = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|~~([^~\n]+)~~|\*\*([^*\n]+)\*\*/g;
+function postTokens(text){
+  const out = []; let last = 0, m; TOK_RE.lastIndex = 0;
+  while ((m = TOK_RE.exec(text))){
+    if (m.index > last) out.push({t:"txt", v:text.slice(last, m.index)});
+    if (m[1] !== undefined) out.push({t:"a", v:m[1], href:m[2]});
+    else if (m[3] !== undefined) out.push({t:"s", v:m[3]});
+    else out.push({t:"b", v:m[4]});
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push({t:"txt", v:text.slice(last)});
+  return out;
+}
+function postNodes(text){
+  const frag = document.createDocumentFragment();
+  for (const k of postTokens(text)){
+    if (k.t === "txt"){ frag.appendChild(document.createTextNode(k.v)); continue; }
+    const el = document.createElement(k.t === "a" ? "a" : k.t);
+    if (k.t === "a"){ el.href = k.href; el.target = "_blank"; el.rel = "noopener"; }
+    el.textContent = k.v; frag.appendChild(el);
+  }
+  return frag;
+}
+function escHtml(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function postHtml(text){
+  return postTokens(text).map(k => k.t === "txt" ? escHtml(k.v)
+    : k.t === "a" ? '<a href="' + k.href + '">' + escHtml(k.v) + "</a>"
+    : "<" + k.t + ">" + escHtml(k.v) + "</" + k.t + ">").join("").replace(/\n/g, "<br>");
+}
+function postPlain(text){ return postTokens(text).map(k => k.v).join(""); }
+/* rich copy: links + strike + bold survive paste into Telegram (web / desktop) */
+async function copyPost(text, btn, label){
+  const plain = postPlain(text), html = postHtml(text);
+  let ok = false;
+  try {
+    await navigator.clipboard.write([new ClipboardItem({"text/plain": new Blob([plain], {type:"text/plain"}), "text/html": new Blob([html], {type:"text/html"})})]);
+    ok = true;
+  } catch(e){}
+  if (!ok){
+    try {
+      const box = document.createElement("div"); box.contentEditable = "true"; box.innerHTML = html;
+      box.style.cssText = "position:fixed;left:-9999px;top:0;white-space:pre-wrap;color:#000;background:#fff";
+      document.body.appendChild(box);
+      const r = document.createRange(); r.selectNodeContents(box);
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      ok = document.execCommand("copy"); sel.removeAllRanges(); box.remove();
+    } catch(e){}
+  }
+  if (!ok){ try { await navigator.clipboard.writeText(plain); ok = "plain"; } catch(e){} }
+  const lab = label || btn.textContent;
+  if (ok){
+    btn.textContent = "Скопировано ✓"; btn.classList.add("ok");
+    setTimeout(() => { btn.textContent = lab; btn.classList.remove("ok"); }, 2500);
+    setStatus(ok === "plain" ? "Скопировано без ссылок — браузер не дал форматирование." : "Скопировано со ссылками – вставляй в Telegram.");
+  } else setStatus("Не удалось скопировать — выдели текст в окне вручную.");
+}
+let dl;
+async function saveImage(img, btn){
+  if (dl === undefined){ try { dl = await window.claude?.use?.("downloads"); } catch(e){ dl = null; } }
+  if (!dl){ window.open(img.url, "_blank", "noopener"); return; }
+  btn.disabled = true;
+  try {
+    const blob = await (await fetch(img.url)).blob();
+    await dl.save({filename: img.name || "image.png", data: blob});
+    setStatus("Сохранено: " + (img.name || "картинка"));
+  } catch(e){ setStatus(e && e.code === "declined" ? "Сохранение отменено." : "Не удалось сохранить картинку."); }
+  btn.disabled = false;
+}
+function openPost(it, kind){
+  const p = it[kind + "Post"]; if (!p) return;
+  lastFocus = document.activeElement;
+  const ov = document.createElement("div"); ov.className = "overlay"; ov.id = "ov";
+  const sh = document.createElement("div"); sh.className = "sheet"; sh.setAttribute("role","dialog"); sh.setAttribute("aria-modal","true"); sh.setAttribute("aria-labelledby","shTitle");
+  const top = document.createElement("div"); top.className = "sh-top";
+  const hd = document.createElement("div");
+  const ey = document.createElement("div"); ey.className = "eyebrow"; ey.textContent = (kind === "tg" ? "Telegram" : "Instagram") + (it.kw ? " · «" + it.kw + "»" : "");
+  const h = document.createElement("h3"); h.id = "shTitle"; h.textContent = it.topic || "";
+  hd.append(ey, h);
+  const cl = document.createElement("button"); cl.type = "button"; cl.className = "close"; cl.textContent = "Закрыть";
+  cl.addEventListener("click", closeScript);
+  top.append(hd, cl);
+  const body = document.createElement("div"); body.className = "post"; body.appendChild(postNodes(String(p.text)));
+  const cr = document.createElement("div"); cr.className = "srow";
+  const cb = document.createElement("button"); cb.type = "button"; cb.className = "btn"; cb.textContent = kind === "tg" ? "Копировать для TG" : "Скопировать текст";
+  cb.addEventListener("click", () => copyPost(String(p.text), cb, cb.textContent));
+  cr.appendChild(cb);
+  if (p.status){ const s = document.createElement("span"); s.className = "note"; s.textContent = p.status; cr.appendChild(s); }
+  sh.append(top, cr, body);
+  if (p.note){ const n = document.createElement("div"); n.className = "note"; n.textContent = p.note; sh.appendChild(n); }
+  if (Array.isArray(p.images) && p.images.length){
+    const g = document.createElement("div"); g.className = "gal";
+    p.images.forEach((img, i) => {
+      const f = document.createElement("figure");
+      const im = document.createElement("img"); im.src = img.url; im.alt = img.name || ("Картинка " + (i + 1)); im.loading = "lazy";
+      const fc = document.createElement("figcaption");
+      const nm = document.createElement("span"); nm.textContent = (i + 1) + " · " + (img.name || "");
+      const sb = document.createElement("button"); sb.type = "button"; sb.className = "copy"; sb.textContent = "Скачать";
+      sb.addEventListener("click", () => saveImage(img, sb));
+      fc.append(nm, sb); f.append(im, fc); g.appendChild(f);
+    });
+    sh.appendChild(g);
+  }
+  if (it.folder){
+    const fr = document.createElement("div"); fr.className = "srow";
+    const fb = document.createElement("button"); fb.type = "button"; fb.className = "copy"; fb.textContent = "Скопировать путь";
+    fb.addEventListener("click", () => copyPath(it.folder, fb));
+    const fl = document.createElement("span"); fl.className = "note"; fl.textContent = "все файлы поста в папке ролика · Finder → ⌘⇧G";
+    fr.append(fb, fl); sh.appendChild(fr);
+  }
+  ov.appendChild(sh);
+  ov.addEventListener("click", e => { if (e.target === ov) closeScript(); });
+  document.body.appendChild(ov); cl.focus();
+}
+function closeScript(){ const ov = document.getElementById("ov"); if (ov) ov.remove(); if (lastFocus) lastFocus.focus(); }
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeScript(); });
+
+/* ---------- ideas ---------- */
+const STATUSES = [["wait","Отложено"],["plan","В плане"],["work","В работе"],["done","Сделано"]];
+let ideas = [];
+let ideasLoaded = false;
+let filter = "all";
+const FORMATS = [["screen","Скринкаст Blender"],["doas","3D-печать"],["head","Говорящая голова"],["carousel","Карусель"],["tg","TG-пост"],["none","Не определён"]];
+let fmtFilter = "all";
+const fmtOf = i => FORMATS.some(([k]) => k === i.fmt) ? i.fmt : "none";
+{ const fs = document.getElementById("fFmt"); for (const [k,l] of FORMATS){ const o = document.createElement("option"); o.value = k; o.textContent = l; if (k === "none") o.selected = true; fs.appendChild(o); } }
+function renderFmtFilters(){
+  const box = document.getElementById("fmtFilters"); box.textContent = "";
+  const base = ideas.filter(i => filter === "all" || i.status === filter);
+  for (const [k, l] of [["all","Все форматы"], ...FORMATS]){
+    const n = k === "all" ? base.length : base.filter(i => fmtOf(i) === k).length;
+    if (k !== "all" && !n && fmtFilter !== k) continue;
+    const b = document.createElement("button"); b.type = "button";
+    b.setAttribute("aria-pressed", String(fmtFilter === k));
+    b.append(l); const c = document.createElement("b"); c.textContent = n; b.append(c);
+    b.addEventListener("click", () => { fmtFilter = k; renderIdeas(); });
+    box.appendChild(b);
+  }
+}
+
+function renderFilters(){
+  const box = document.getElementById("filters"); box.textContent = "";
+  const counts = {all: ideas.length};
+  for (const [k] of STATUSES) counts[k] = ideas.filter(i => i.status === k).length;
+  for (const [k, l] of [["all","Все"], ...STATUSES]){
+    const b = document.createElement("button"); b.type = "button";
+    b.setAttribute("aria-pressed", String(filter === k));
+    b.append(l); const n = document.createElement("b"); n.textContent = counts[k]; b.append(n);
+    b.addEventListener("click", () => { filter = k; renderIdeas(); });
+    box.appendChild(b);
+  }
+  document.getElementById("nIdeas").textContent = ideasLoaded ? String(counts.wait + counts.plan) : "";
+}
+function fmtDate(s){
+  if (!s) return "";
+  const d = new Date(s); if (isNaN(d)) return s;
+  return String(d.getDate()).padStart(2,"0") + "." + String(d.getMonth()+1).padStart(2,"0") + "." + d.getFullYear();
+}
+function renderIdeas(){
+  renderFilters(); renderFmtFilters();
+  const tb = document.getElementById("rows"); tb.textContent = "";
+  const order = {work:0, plan:1, wait:2, done:3};
+  const list = ideas.filter(i => (filter === "all" || i.status === filter) && (fmtFilter === "all" || fmtOf(i) === fmtFilter))
+    .sort((a,b) => (order[a.status] ?? 9) - (order[b.status] ?? 9) || String(b.added||"").localeCompare(String(a.added||"")));
+  if (!list.length){
+    const tr = document.createElement("tr"); const td = document.createElement("td");
+    td.className = "empty"; td.colSpan = 6;
+    td.textContent = !ideasLoaded ? (db ? "Загружаю идеи…" : "Идеи появятся, когда страница подключится к хранилищу.") : "Здесь пока пусто. Добавь идею в форме ниже.";
+    tr.appendChild(td); tb.appendChild(tr); return;
+  }
+  for (const it of list){
+    const tr = document.createElement("tr"); tr.className = "s-" + it.status;
+    const t = document.createElement("td"); t.className = "title"; t.textContent = it.title || "";
+    const r = document.createElement("td"); const rs = document.createElement("span"); rs.className = "rub"; rs.textContent = it.rubric || ""; r.appendChild(rs);
+    if (LM[it.lm]){ const lt = document.createElement("span"); lt.className = "lmtag"; lt.textContent = LM[it.lm][0]; r.appendChild(lt); }
+    const f = document.createElement("td");
+    const fsel = document.createElement("select"); fsel.className = "fmtsel"; fsel.setAttribute("aria-label", "Формат: " + (it.title || ""));
+    for (const [k,l] of FORMATS){ const o = document.createElement("option"); o.value = k; o.textContent = l; if (k === fmtOf(it)) o.selected = true; fsel.appendChild(o); }
+    fsel.addEventListener("change", () => changeFmt(it.id, fsel.value));
+    f.appendChild(fsel);
+    const d = document.createElement("td"); d.className = "desc"; d.textContent = it.desc || "";
+    const s = document.createElement("td");
+    const wrap = document.createElement("span"); wrap.className = "st s-" + it.status;
+    const dot = document.createElement("span"); dot.className = "dot";
+    const sel = document.createElement("select"); sel.id = "st-" + it.id; sel.setAttribute("aria-label", "Статус: " + (it.title || ""));
+    for (const [k,l] of STATUSES){ const o = document.createElement("option"); o.value = k; o.textContent = l; if (k === it.status) o.selected = true; sel.appendChild(o); }
+    sel.addEventListener("change", () => changeStatus(it.id, sel.value));
+    wrap.append(dot, sel); s.appendChild(wrap);
+    const dt = document.createElement("td"); dt.className = "date"; dt.textContent = fmtDate(it.added);
+    tr.append(t, r, f, d, s, dt); tb.appendChild(tr);
+  }
+}
+async function changeStatus(id, status){
+  const it = ideas.find(i => i.id === id); if (it) it.status = status; renderIdeas();
+  if (!db){ setStatus("Хранилище недоступно: статус не сохранится."); return; }
+  try { await db.doc("ideas/" + id).update({status}); setStatus("Статус сохранён."); }
+  catch(e){ setStatus("Не удалось сохранить статус. Попробуй ещё раз."); }
+}
+async function changeFmt(id, fmt){
+  const it = ideas.find(i => i.id === id); if (it) it.fmt = fmt; renderIdeas();
+  if (!db){ setStatus("Хранилище недоступно: формат не сохранится."); return; }
+  try { await db.doc("ideas/" + id).update({fmt}); setStatus("Формат сохранён."); }
+  catch(e){ setStatus("Не удалось сохранить формат. Попробуй ещё раз."); }
+}
+document.getElementById("addForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const title = document.getElementById("fTitle").value.trim();
+  if (!title){ setStatus("Впиши название идеи."); return; }
+  if (!db){ setStatus("Хранилище недоступно: идея не сохранится. Напиши её Claude в чат."); return; }
+  const btn = document.getElementById("fBtn"); btn.disabled = true;
+  try {
+    await db.collection("ideas").add({
+      title, rubric: document.getElementById("fRub").value,
+      desc: document.getElementById("fDesc").value.trim(),
+      lm: document.getElementById("fLm").value, fmt: document.getElementById("fFmt").value,
+      status: "wait", added: new Date().toISOString().slice(0,10)
+    });
+    document.getElementById("fTitle").value = ""; document.getElementById("fDesc").value = "";
+    setStatus("Идея добавлена.");
+  } catch(err){ setStatus("Не удалось добавить идею. Попробуй ещё раз."); }
+  btn.disabled = false;
+});
+
+/* ---------- pipeline status ---------- */
+const STAGES = [["ready","Готово","к выходу"],["edited","Смонтировано","ждёт файл / ChatPlace"],["shot","Отснято","в монтаж"],["script","Сценарий","ждёт съёмки"],["idea","Идея","без сценария"]];
+const LEVEL = {idea:0, script:1, shot:2, edited:3, ready:4};
+function sw(stage){ const r = document.createElement("span"); r.className = "sw st-" + stage; r.setAttribute("aria-hidden","true"); return r; }
+function focusTile(id){
+  showTab("feed");
+  let el = document.getElementById("tile-" + id);
+  if (!el && (catFilter || stageFilter)){ catFilter = null; stageFilter = null; try { localStorage.removeItem("nb-cat"); } catch(e){} renderLegend(); renderFeed(); el = document.getElementById("tile-" + id); }
+  if (!el) return;
+  el.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center"});
+  el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+}
+const SLOT_DAYS = [2,4,6]; /* Вт, Чт, Сб */
+let stageFilter = null;
+function stageOf(it){
+  const steps = stepsFor(it);
+  if (steps.every(([k]) => it[k])) return "ready";
+  if (it.s_edit) return "edited";
+  if (it.fmt !== "carousel" && it.s_shoot) return "shot";
+  if (it.s_script) return "script";
+  return "idea";
+}
+function addDays(str, n){ const d = new Date(str + "T12:00:00"); d.setDate(d.getDate() + n); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function renderPipe(){
+  const box = document.getElementById("pipe"); if (!box) return;
+  box.textContent = "";
+  if (!feedLoaded){ box.hidden = true; return; } box.hidden = false;
+  const open = feed.filter(x => !x.pub);
+  const st = document.createElement("div"); st.className = "stages";
+  for (const [k,l,sub] of STAGES){
+    const n = open.filter(x => stageOf(x) === k).length;
+    const b = document.createElement("button"); b.type = "button"; b.className = "stg st-" + k + (n ? "" : " z"); b.id = "stg-" + k;
+    b.setAttribute("aria-pressed", String(stageFilter === k));
+    b.title = stageFilter === k ? "Показать все плитки" : "Показать только «" + l + "»";
+    const v = document.createElement("b"); v.textContent = n;
+    const lb = document.createElement("span"); lb.className = "lab"; lb.append(sw(k), l);
+    b.append(v, lb, sub);
+    b.addEventListener("click", () => { stageFilter = stageFilter === k ? null : k; renderFeed(); });
+    st.appendChild(b);
+  }
+  box.appendChild(st);
+  /* coverage: 14 days from today */
+  const t = todayStr(); const days = [];
+  for (let i = 0; i < 14; i++) days.push(addDays(t, i));
+  const okStage = new Set(["shot","edited","ready"]);
+  let gap = null, readyTo = null;
+  for (const d of days){
+    const tiles = open.filter(x => x.date === d);
+    const slot = SLOT_DAYS.includes(new Date(d + "T12:00:00").getDay());
+    if (!slot && !tiles.length) continue;
+    const good = tiles.length && tiles.some(x => okStage.has(stageOf(x)));
+    if (good && !gap) readyTo = d;
+    if (!good && slot && !gap) gap = d;
+  }
+  const hd = document.createElement("div"); hd.className = "cover-h";
+  const l1 = document.createElement("span");
+  if (gap){
+    l1.append("Отснятый запас ", Object.assign(document.createElement("b"), {textContent: readyTo ? "до " + WD[new Date(readyTo+"T12:00:00").getDay()] + " " + ddmm(readyTo) : "пуст"}), " · ");
+    const w = document.createElement("span"); w.className = "warn"; w.textContent = "нужна съёмка к " + WD[new Date(gap+"T12:00:00").getDay()] + " " + ddmm(gap);
+    l1.appendChild(w);
+  } else l1.append("Отснятый запас покрывает ближайшие 2 недели");
+  const l2 = document.createElement("span"); l2.textContent = "14 дней · слоты Вт / Чт / Сб";
+  hd.append(l1, l2); box.appendChild(hd);
+  const cv = document.createElement("div"); cv.className = "cover";
+  for (const d of days){
+    const dt = new Date(d + "T12:00:00");
+    const slot = SLOT_DAYS.includes(dt.getDay());
+    const tiles = open.filter(x => x.date === d);
+    const c = document.createElement("div"); c.className = "cd" + (slot ? " slot" : "") + (d === t ? " today" : "");
+    const n = document.createElement("span"); n.className = "n"; n.textContent = ddmm(d);
+    const w = document.createElement("span"); w.textContent = WD[dt.getDay()];
+    c.append(n, w);
+    for (const x of tiles){
+      const sg = stageOf(x);
+      const bt = document.createElement("button"); bt.type = "button"; bt.className = "ci st-" + sg + " c-" + (CATS[x.cat] ? x.cat : "exp"); bt.id = "ci-" + x.id;
+      bt.title = (CATS[x.cat] || ["Без формата"])[0] + ": " + (x.topic || "") + " — " + STAGES.find(s => s[0] === sg)[1] + ". Нажми, чтобы найти плитку";
+      const dot = document.createElement("span"); dot.className = "cdot"; bt.append(dot);
+      bt.addEventListener("click", () => focusTile(x.id));
+      c.appendChild(bt);
+    }
+    if (!tiles.length && slot){ const e = document.createElement("span"); e.className = "ci empty"; e.textContent = "нет ролика"; e.title = "Слот публикации (Вт/Чт/Сб), на который ничего не стоит"; c.appendChild(e); }
+    cv.appendChild(c);
+  }
+  box.appendChild(cv);
+  const key = document.createElement("div"); key.className = "ckey";
+  { const s2 = document.createElement("span"); s2.textContent = "Точка — формат, как в ленте · рамка и заливка — готовность: от зелёного (готово) до красного (идея)"; key.appendChild(s2); }
+  box.appendChild(key);
+}
+
+/* ---------- pick (отбор) ---------- */
+/* shoots/{id}: date, fmt (screen|doas|useful|exp|mix). ideas: pick (format), pickSt (cand|no), shoot (shoot id), pickOrder, refs[], checks{first,behind,share}, script, tile (feed id) */
+const PFMT = [["screen","Фишка Blender"],["doas","3D-печать"],["useful","Разбор студента"],["exp","Эксперимент"],["case","Коммерция"],["none","Без формата"]];
+const SFMT = [["screen","Фишка Blender"],["useful","Разбор студента"],["doas","3D-печать"],["exp","Эксперимент"],["mix","Сборная"]];
+const PNAME = Object.fromEntries(PFMT);
+const CHECKS = [["first","1-я сек"],["behind","за словом"],["save","сохранить"],["share","переслать"]];
+const CK_HELP = {first:"результат виден в 1-ю секунду — хук работает", behind:"за кодовым словом лежит вещь, которую не унести глазами (.blend, STL, нод-сетап)", save:"хочется сохранить на потом — польза", share:"есть повод переслать — узнаваемо + твист, вау, смешно"};
+function checksRow(it, live){
+  const ck = document.createElement("div"); ck.className = "checks";
+  for (const [k,l] of CHECKS){
+    const b = document.createElement("button"); b.type = "button"; b.id = (live ? "sck-" : "ck-") + it.id + "-" + k;
+    const paint = () => { const v = (it.checks || {})[k] || ""; b.className = "ck " + v; b.title = l + ": " + CK_TXT[v] + " — " + CK_HELP[k]; };
+    b.textContent = l; paint();
+    b.addEventListener("click", () => {
+      const cur = it.checks || {}; const v = CK_NEXT[cur[k] || ""];
+      it.checks = {...cur, [k]: v}; paint();
+      updIdea(it.id, {checks: it.checks}, "Оценка сохранена.");
+    });
+    ck.appendChild(b);
+  }
+  return ck;
+}
+const CK_NEXT = {"":"g", g:"y", y:"r", r:""};
+const CK_TXT = {"":"не оценено", g:"да", y:"под вопросом", r:"нет"};
+const BLOCK = 4;
+let shoots = []; let shootsLoaded = false;
+let pfFilter = "all"; let showRej = false; let showPast = false;
+try { const v = localStorage.getItem("nb-pf"); if (v) pfFilter = v; } catch(e){}
+const pfOf = it => PNAME[it.pick] ? it.pick : "none";
+const tileOf = it => it.tile ? feed.find(f => f.id === it.tile) : null;
+function ddmm(s){ const d = new Date(String(s) + "T12:00:00"); return isNaN(d) ? String(s||"") : String(d.getDate()).padStart(2,"0") + "." + String(d.getMonth()+1).padStart(2,"0"); }
+function wdOf(s){ const d = new Date(String(s) + "T12:00:00"); return isNaN(d) ? "" : WD[d.getDay()]; }
+const byOrder = (a,b) => (a.pickOrder ?? 999) - (b.pickOrder ?? 999) || String(a.title||"").localeCompare(String(b.title||""));
+async function updIdea(id, patch, msg){
+  const it = ideas.find(i => i.id === id); if (it) Object.assign(it, patch); renderPick();
+  if (!db){ setStatus("Хранилище недоступно: изменение не сохранится."); return; }
+  try { await db.doc("ideas/" + id).update(patch); setStatus(msg || "Сохранено."); }
+  catch(e){ setStatus("Не удалось сохранить. Попробуй ещё раз."); }
+}
+function toShoot(itId, shootId){
+  const mx = Math.max(0, ...ideas.filter(i => i.shoot === shootId && i.id !== itId).map(i => i.pickOrder || 0));
+  updIdea(itId, shootId ? {shoot: shootId, pickOrder: mx + 1, pickSt: "cand", status: "plan"} : {shoot: "", pickOrder: 999}, shootId ? "Взято на съёмку." : "Вернул в кандидаты.");
+}
+function pickCard(it, mode){
+  const c = document.createElement("article"); c.className = "pcard c-" + pfOf(it) + (mode === "rej" ? " rej" : ""); c.id = "pk-" + it.id;
+  if (mode !== "rej"){
+    c.draggable = true;
+    c.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", it.id); e.dataTransfer.effectAllowed = "move"; c.classList.add("drag"); });
+    c.addEventListener("dragend", () => c.classList.remove("drag"));
+  }
+  const hd = document.createElement("div"); hd.className = "phd";
+  const fm = document.createElement("span"); fm.className = "pfm"; fm.textContent = PNAME[pfOf(it)];
+  hd.appendChild(fm);
+  const tl = tileOf(it);
+  if (tl){ const ch = document.createElement("span"); ch.className = "intile"; ch.textContent = "лента " + ddmm(tl.date) + (tl.pub ? " · вышло" : ""); hd.appendChild(ch); }
+  c.appendChild(hd);
+  const t = document.createElement("div"); t.className = "pt"; t.textContent = it.title || ""; c.appendChild(t);
+  const refs = (Array.isArray(it.refs) && it.refs.length ? it.refs : (tl && Array.isArray(tl.refs) ? tl.refs : [])).filter(r => r && /^https?:\/\//.test(String(r.url||"")));
+  const rr = document.createElement("div"); rr.className = "prefs";
+  if (refs.length) for (const r of refs){
+    const a = document.createElement("a"); a.className = "refa"; a.href = r.url; a.target = "_blank"; a.rel = "noopener"; a.draggable = false;
+    let lab = r.label; if (!lab){ try { lab = new URL(r.url).hostname.replace(/^www\./, ""); } catch(e){ lab = "ссылка"; } }
+    a.textContent = lab.replace(/^Реф:\s*/, "") + " ↗"; a.title = r.url; rr.appendChild(a);
+  } else { const n = document.createElement("span"); n.className = "noref"; n.textContent = "без референса"; rr.appendChild(n); }
+  c.appendChild(rr);
+  if (mode !== "shoot") c.appendChild(checksRow(it, false));
+  const ac = document.createElement("div"); ac.className = "pacts";
+  const sb = document.createElement("button"); sb.type = "button"; sb.className = "open"; sb.id = "psc-" + it.id;
+  const scr = tl ? tl.script : it.script;
+  sb.textContent = scr ? "Сценарий ↗" : "+ Сценарий"; if (scr) sb.classList.add("has");
+  sb.addEventListener("click", () => openScriptEdit(it));
+  ac.appendChild(sb);
+  if (mode === "shoot"){
+    const l = document.createElement("button"); l.type = "button"; l.className = "ord"; l.textContent = "←"; l.title = "Левее";
+    const r = document.createElement("button"); r.type = "button"; r.className = "ord"; r.textContent = "→"; r.title = "Правее";
+    const x = document.createElement("button"); x.type = "button"; x.className = "ord"; x.textContent = "×"; x.title = "Убрать со съёмки обратно в кандидаты";
+    l.addEventListener("click", () => movePick(it, -1)); r.addEventListener("click", () => movePick(it, 1)); x.addEventListener("click", () => toShoot(it.id, ""));
+    ac.append(l, r, x);
+  } else if (mode === "pool"){
+    const up = shoots.filter(sh => !sh.done).sort((a,b) => String(a.date).localeCompare(String(b.date)));
+    if (up.length){
+      const sel = document.createElement("select"); sel.className = "lmsel"; sel.setAttribute("aria-label", "На съёмку");
+      const o0 = document.createElement("option"); o0.value = ""; o0.textContent = "На съёмку…"; sel.appendChild(o0);
+      for (const sh of up){ const o = document.createElement("option"); o.value = sh.id; o.textContent = ddmm(sh.date) + " " + wdOf(sh.date); sel.appendChild(o); }
+      sel.addEventListener("change", () => { if (sel.value) toShoot(it.id, sel.value); });
+      ac.appendChild(sel);
+    }
+    const no = document.createElement("button"); no.type = "button"; no.className = "ord"; no.textContent = "Отказ"; no.title = "Убрать в отказы";
+    no.addEventListener("click", () => updIdea(it.id, {pickSt: "no", shoot: ""}, "Убрал в отказы."));
+    ac.appendChild(no);
+  } else {
+    const back = document.createElement("button"); back.type = "button"; back.className = "ord"; back.textContent = "Вернуть";
+    back.addEventListener("click", () => updIdea(it.id, {pickSt: "cand"}, "Вернул в кандидаты."));
+    ac.appendChild(back);
+  }
+  if (!tl && mode !== "rej"){
+    const di = document.createElement("input"); di.type = "date"; di.id = "pdt-" + it.id; di.setAttribute("aria-label", "Дата выхода в ленте"); di.title = "Дата выхода в ленте";
+    const go = document.createElement("button"); go.type = "button"; go.className = "open"; go.textContent = "В ленту"; go.disabled = true;
+    go.title = "Создать плитку в ленте — рефы и сценарий переедут туда";
+    di.addEventListener("input", () => { go.disabled = !di.value; });
+    go.addEventListener("click", () => toFeed(it, di.value, go));
+    const w = document.createElement("div"); w.className = "pacts sub"; w.append(di, go);
+    c.append(ac, w);
+  } else c.appendChild(ac);
+  return c;
+}
+async function movePick(it, dir){
+  const list = ideas.filter(i => i.shoot === it.shoot).sort(byOrder);
+  const ix = list.findIndex(i => i.id === it.id), j = ix + dir;
+  if (j < 0 || j >= list.length) return;
+  [list[ix], list[j]] = [list[j], list[ix]];
+  list.forEach((x, n) => { x.pickOrder = n + 1; });
+  renderPick();
+  if (!db){ setStatus("Хранилище недоступно: порядок не сохранится."); return; }
+  try { for (const x of list) await db.doc("ideas/" + x.id).update({pickOrder: x.pickOrder}); setStatus("Порядок сохранён."); }
+  catch(e){ setStatus("Не удалось сохранить порядок."); }
+}
+async function toFeed(it, date, btn){
+  if (!date) return;
+  if (!db){ setStatus("Хранилище недоступно: плитка не создастся."); return; }
+  btn.disabled = true;
+  try {
+    const cat = ["screen","doas","useful","exp","case"].includes(it.pick) ? it.pick : "exp";
+    const ref = await db.collection("feed").add({
+      date, cat, fmt: "reel", topic: it.title || "", kw: "", pub: false,
+      refs: Array.isArray(it.refs) ? it.refs : [], script: it.script || "",
+      s_script: !!it.script, s_shoot: false, s_edit: false, s_guide: false, s_cp: false,
+      note: "Из «Отбора» " + ddmm(todayStr()) + "."
+    });
+    const id = ref && ref.id;
+    await db.doc("ideas/" + it.id).update(id ? {tile: id, status: "plan"} : {status: "plan"});
+    setStatus("Плитка " + ddmm(date) + " в ленте.");
+  } catch(e){ setStatus("Не удалось создать плитку. Попробуй ещё раз."); btn.disabled = false; }
+}
+function openScriptEdit(it){
+  lastFocus = document.activeElement;
+  const tl = tileOf(it);
+  const ov = document.createElement("div"); ov.className = "overlay"; ov.id = "ov";
+  const sh = document.createElement("div"); sh.className = "sheet"; sh.setAttribute("role","dialog"); sh.setAttribute("aria-modal","true"); sh.setAttribute("aria-labelledby","shTitle");
+  const top = document.createElement("div"); top.className = "sh-top";
+  const hd = document.createElement("div");
+  const ey = document.createElement("div"); ey.className = "eyebrow"; ey.textContent = "Сценарий" + (tl ? " · плитка " + ddmm(tl.date) : " · черновик в отборе");
+  const h = document.createElement("h3"); h.id = "shTitle"; h.textContent = it.title || "";
+  hd.append(ey, h);
+  const cl = document.createElement("button"); cl.type = "button"; cl.className = "close"; cl.textContent = "Закрыть";
+  cl.addEventListener("click", closeScript);
+  top.append(hd, cl);
+  const ta = document.createElement("textarea"); ta.id = "scrEdit"; ta.value = (tl ? tl.script : it.script) || "";
+  ta.placeholder = "Весь текст одним куском, ремарки в скобках.";
+  const row = document.createElement("div"); row.className = "srow";
+  const sv = document.createElement("button"); sv.type = "button"; sv.className = "btn"; sv.textContent = "Сохранить";
+  const nt = document.createElement("span"); nt.className = "note"; nt.textContent = tl ? "Сохраняется прямо в плитку ленты." : "Переедет в плитку, когда поставишь в ленту.";
+  sv.addEventListener("click", async () => {
+    const v = ta.value;
+    if (!db){ setStatus("Хранилище недоступно: сценарий не сохранится."); return; }
+    sv.disabled = true;
+    try {
+      if (tl){ await db.doc("feed/" + tl.id).update({script: v}); tl.script = v; }
+      else { await db.doc("ideas/" + it.id).update({script: v}); it.script = v; }
+      setStatus("Сценарий сохранён."); closeScript(); renderPick();
+    } catch(e){ setStatus("Не удалось сохранить сценарий."); sv.disabled = false; }
+  });
+  row.append(sv, nt);
+  const cl2 = document.createElement("div"); cl2.className = "psec"; cl2.textContent = "Сверь текст с метками";
+  sh.append(top, cl2, checksRow(it, true), ta, row); ov.appendChild(sh);
+  ov.addEventListener("click", e => { if (e.target === ov) closeScript(); });
+  document.body.appendChild(ov); ta.focus();
+}
+function dropZone(el, shootId){
+  el.addEventListener("dragover", e => { e.preventDefault(); el.classList.add("over"); });
+  el.addEventListener("dragleave", () => el.classList.remove("over"));
+  el.addEventListener("drop", e => { e.preventDefault(); el.classList.remove("over"); const id = e.dataTransfer.getData("text/plain"); if (id) toShoot(id, shootId); });
+}
+async function updShoot(id, patch){
+  const sh = shoots.find(x => x.id === id); if (sh) Object.assign(sh, patch); renderPick();
+  if (!db) return;
+  try { await db.doc("shoots/" + id).update(patch); setStatus("Съёмка сохранена."); } catch(e){ setStatus("Не удалось сохранить съёмку."); }
+}
+async function delShoot(id){
+  if (!db) return;
+  try {
+    for (const it of ideas.filter(i => i.shoot === id)) await db.doc("ideas/" + it.id).update({shoot: ""});
+    await db.doc("shoots/" + id).delete(); setStatus("Съёмка убрана, ролики вернулись в кандидаты.");
+  } catch(e){ setStatus("Не удалось убрать съёмку."); }
+}
+async function doneShoot(sh, done){
+  const items = ideas.filter(i => i.shoot === sh.id);
+  await updShoot(sh.id, done ? {done: true, doneDate: todayStr()} : {done: false});
+  if (!db) return;
+  try {
+    for (const it of items){
+      const tl = tileOf(it);
+      if (tl){ await db.doc("feed/" + tl.id).update({s_shoot: done}); tl.s_shoot = done; }
+    }
+    setStatus(done ? "Съёмка проведена: ролики отмечены «Съёмка» в ленте." : "Съёмка снова в плане.");
+  } catch(e){ setStatus("Не удалось отметить ролики в ленте."); }
+}
+function shootRow(sh){
+  const items = ideas.filter(i => i.shoot === sh.id).sort(byOrder);
+  const past = !sh.done && sh.date < todayStr();
+  const row = document.createElement("section"); row.className = "shoot sf-" + (sh.fmt || "mix") + (sh.done ? " past" : ""); row.id = "shoot-" + sh.id;
+  const hd = document.createElement("div"); hd.className = "shd";
+  const when = document.createElement("div"); when.className = "when";
+  const dd = document.createElement("span"); dd.className = "dd"; dd.textContent = ddmm(sh.date);
+  const wd = document.createElement("span"); wd.className = "wd"; wd.textContent = wdOf(sh.date) + (sh.date === todayStr() ? " · сегодня" : "") + (sh.done ? " · проведена" : past ? " · прошла" : " · съёмка");
+  when.append(dd, wd);
+  const di = document.createElement("input"); di.type = "date"; di.className = "sdate"; di.value = sh.date || ""; di.setAttribute("aria-label", "Дата съёмки"); di.title = "Сменить дату съёмки";
+  di.addEventListener("change", () => { if (di.value) updShoot(sh.id, {date: di.value}); });
+  const fs = document.createElement("select"); fs.className = "lmsel"; fs.setAttribute("aria-label", "Формат съёмки");
+  for (const [k,l] of SFMT){ const o = document.createElement("option"); o.value = k; o.textContent = l; if (k === (sh.fmt || "mix")) o.selected = true; fs.appendChild(o); }
+  fs.addEventListener("change", () => updShoot(sh.id, {fmt: fs.value}));
+  const cnt = document.createElement("span"); cnt.className = "cnt";
+  const b = document.createElement("b"); b.textContent = Math.min(items.length, BLOCK) + "/" + BLOCK; cnt.append(b, items.length > BLOCK ? " +" + (items.length - BLOCK) + " сверх" : "");
+  const dn = document.createElement("button"); dn.type = "button"; dn.className = "open sdone" + (sh.done ? "" : " go");
+  dn.textContent = sh.done ? "Вернуть в план" : "✓ Съёмка проведена";
+  dn.title = sh.done ? "Снять отметку" : "Слот уйдёт в «Проведённые», ролики получат отметку «Съёмка» в ленте";
+  dn.addEventListener("click", () => doneShoot(sh, !sh.done));
+  const del = document.createElement("button"); del.type = "button"; del.className = "ord"; del.textContent = "Убрать";
+  del.title = "Удалить съёмочный день — ролики вернутся в кандидаты";
+  let armed = false;
+  del.addEventListener("click", () => {
+    if (!armed){ armed = true; del.textContent = "Точно убрать?"; del.classList.add("warn"); setTimeout(() => { armed = false; del.textContent = "Убрать"; del.classList.remove("warn"); }, 3000); return; }
+    delShoot(sh.id);
+  });
+  hd.append(when, di, fs, cnt, dn, del);
+  row.appendChild(hd);
+  const g = document.createElement("div"); g.className = "sgrid"; dropZone(g, sh.id);
+  items.slice(0, BLOCK).forEach(it => g.appendChild(pickCard(it, "shoot")));
+  for (let n = items.length; n < BLOCK; n++){ const e = document.createElement("div"); e.className = "pslot"; e.textContent = "Перетащи кандидата сюда"; g.appendChild(e); }
+  row.appendChild(g);
+  if (items.length > BLOCK){
+    const l = document.createElement("div"); l.className = "psec"; l.textContent = "Сверх блока"; row.appendChild(l);
+    const g2 = document.createElement("div"); g2.className = "sgrid extra"; dropZone(g2, sh.id);
+    items.slice(BLOCK).forEach(it => g2.appendChild(pickCard(it, "shoot")));
+    row.appendChild(g2);
+  }
+  return row;
+}
+function planRow(n){
+  const row = document.createElement("section"); row.className = "shoot plan";
+  const hd = document.createElement("div"); hd.className = "shd";
+  const lab = document.createElement("div"); lab.className = "when";
+  const dd = document.createElement("span"); dd.className = "dd"; dd.textContent = "—";
+  const wd = document.createElement("span"); wd.className = "wd"; wd.textContent = "съёмка " + n + " · не назначена";
+  lab.append(dd, wd);
+  const di = document.createElement("input"); di.type = "date"; di.className = "sdate"; di.setAttribute("aria-label", "Дата съёмки " + n);
+  const fs = document.createElement("select"); fs.className = "lmsel"; fs.setAttribute("aria-label", "Формат съёмки " + n);
+  for (const [k,l] of SFMT){ const o = document.createElement("option"); o.value = k; o.textContent = l; if (k === "mix") o.selected = true; fs.appendChild(o); }
+  const ab = document.createElement("button"); ab.type = "button"; ab.className = "open sdone go"; ab.textContent = "Назначить"; ab.disabled = true;
+  di.addEventListener("input", () => { ab.disabled = !di.value; });
+  ab.addEventListener("click", async () => {
+    if (!db){ setStatus("Хранилище недоступно."); return; }
+    ab.disabled = true;
+    try { await db.collection("shoots").add({date: di.value, fmt: fs.value, done: false}); setStatus("Съёмка " + ddmm(di.value) + " назначена."); }
+    catch(e){ setStatus("Не удалось добавить съёмку."); ab.disabled = false; }
+  });
+  hd.append(lab, di, fs, ab); row.appendChild(hd);
+  return row;
+}
+function renderPick(){
+  const root = document.getElementById("pickRoot"); if (!root) return;
+  root.textContent = "";
+  /* format filter */
+  const fl = document.getElementById("pfLegend"); fl.textContent = "";
+  const pool = ideas.filter(i => i.pick && i.pickSt !== "no" && !(i.shoot && shoots.some(s => s.id === i.shoot)));
+  for (const [k,l] of [["all","Все"], ...PFMT]){
+    const n = k === "all" ? pool.length : pool.filter(i => pfOf(i) === k).length;
+    const b = document.createElement("button"); b.type = "button"; b.className = "lg"; b.id = "pf-" + k;
+    b.setAttribute("aria-pressed", String(pfFilter === k));
+    if (k !== "all"){ const i = document.createElement("i"); i.style.background = "var(--c-" + (k === "none" ? "exp" : k) + ")"; b.appendChild(i); }
+    b.append(l + " · " + n);
+    b.addEventListener("click", () => { pfFilter = k; try { localStorage.setItem("nb-pf", k); } catch(e){} renderPick(); });
+    fl.appendChild(b);
+  }
+  if (!ideasLoaded || !shootsLoaded){ const p = document.createElement("p"); p.className = "note"; p.textContent = db ? "Загружаю…" : "Отбор появится, когда страница подключится к хранилищу."; root.appendChild(p); document.getElementById("nPick").textContent = ""; return; }
+  const passS = sh => pfFilter === "all" || (sh.fmt || "mix") === pfFilter || (sh.fmt || "mix") === "mix";
+  const sorted = shoots.slice().sort((a,b) => String(a.date).localeCompare(String(b.date)));
+  const up = sorted.filter(sh => !sh.done), doneL = sorted.filter(sh => sh.done).reverse();
+  const h1 = document.createElement("h2"); h1.className = "psh"; h1.textContent = "Съёмки · " + up.length; root.appendChild(h1);
+  up.filter(passS).forEach(sh => root.appendChild(shootRow(sh)));
+  for (let n = up.length + 1; n <= 3; n++) root.appendChild(planRow(n));
+  if (up.length >= 3){
+    const more = document.createElement("button"); more.type = "button"; more.className = "prej"; more.textContent = "+ Ещё съёмочный день";
+    more.addEventListener("click", () => { more.replaceWith(planRow(up.length + 1)); });
+    root.appendChild(more);
+  }
+  if (doneL.length){
+    const pb = document.createElement("button"); pb.type = "button"; pb.className = "prej"; pb.textContent = showPast ? "Скрыть проведённые" : "Проведённые съёмки · " + doneL.length;
+    pb.addEventListener("click", () => { showPast = !showPast; renderPick(); });
+    root.appendChild(pb);
+    if (showPast) doneL.forEach(sh => root.appendChild(shootRow(sh)));
+  }
+  /* pool */
+  const list = pool.filter(i => pfFilter === "all" || pfOf(i) === pfFilter).sort((a,b) => {
+    const fo = PFMT.findIndex(x => x[0] === pfOf(a)) - PFMT.findIndex(x => x[0] === pfOf(b));
+    return fo || byOrder(a,b);
+  });
+  const h2 = document.createElement("h2"); h2.className = "psh"; h2.textContent = "Кандидаты · " + list.length; root.appendChild(h2);
+  const hint = document.createElement("p"); hint.className = "note"; hint.textContent = "Перетащи карточку в съёмочный день или выбери день в «На съёмку…». Ссылки — референсы.";
+  root.appendChild(hint);
+  const pg = document.createElement("div"); pg.className = "pool"; dropZone(pg, "");
+  if (!list.length){ const p = document.createElement("p"); p.className = "note"; p.textContent = "Пока никого. Попроси Claude подобрать."; pg.appendChild(p); }
+  list.forEach(it => pg.appendChild(pickCard(it, "pool")));
+  root.appendChild(pg);
+  const rej = ideas.filter(i => i.pick && i.pickSt === "no" && (pfFilter === "all" || pfOf(i) === pfFilter));
+  if (rej.length){
+    const tb = document.createElement("button"); tb.type = "button"; tb.className = "prej"; tb.textContent = showRej ? "Скрыть отказы" : "Отказ · " + rej.length;
+    tb.addEventListener("click", () => { showRej = !showRej; renderPick(); });
+    root.appendChild(tb);
+    if (showRej){ const rg = document.createElement("div"); rg.className = "pool"; rej.forEach(it => rg.appendChild(pickCard(it, "rej"))); root.appendChild(rg); }
+  }
+  document.getElementById("nPick").textContent = String(pool.length);
+}
+
+/* ---------- boot ---------- */
+renderFeed();
+renderIdeas();
+renderPick();
+(async () => {
+  try { db = await window.claude?.use?.("db"); } catch(e){ db = null; }
+  if (!db){ setStatus("Хранилище недоступно в этом просмотре: изменения не сохранятся."); renderFeed(); renderIdeas(); renderPick(); return; }
+  setStatus("Демо-версия: можно нажимать и перетаскивать, но после перезагрузки всё вернётся как было.");
+  db.collection("feed").onSnapshot(snap => {
+    feed = snap.docs.map(d => ({id: d.id, ...(d.data() || {})}));
+    feedLoaded = true; renderFeed(); renderPick();
+  }, () => setStatus("Связь с хранилищем прервалась. Обнови страницу."));
+  db.collection("shoots").onSnapshot(snap => {
+    shoots = snap.docs.map(d => ({id: d.id, ...(d.data() || {})}));
+    shootsLoaded = true; renderPick();
+  }, () => setStatus("Связь с хранилищем прервалась. Обнови страницу."));
+  db.collection("ideas").onSnapshot(snap => {
+    ideas = snap.docs.map(d => ({id: d.id, ...(d.data() || {})}));
+    ideasLoaded = true; renderIdeas(); renderPick();
+  }, () => setStatus("Связь с хранилищем прервалась. Обнови страницу."));
+})();
+</script>
+
+</body></html>
