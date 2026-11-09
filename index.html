@@ -324,5 +324,18 @@ play(650,true);
 })();
 </script>
 
+<script src="stats.js"></script>
+<script>
+/* что считаем: pdf — скачал гайд, post — перешёл в пост, zip — скачал скилл, link — открыл сервис, outsee — клик по OUTSEE */
+document.addEventListener('click',function(e){
+ var a=e.target.closest&&e.target.closest('a');if(!a||!window.vpfTrack)return;
+ var h=a.href||'',c=a.closest('.card'),b=a.querySelector('b');
+ var t=c?c.querySelector('h3').textContent:(b?b.firstChild.textContent:a.textContent.trim());
+ if(h.indexOf('outsee.io')>=0)vpfTrack('outsee',t);
+ else if(h.indexOf('drive.google.com')>=0)vpfTrack(a.classList.contains('lk')?'zip':'pdf',t);
+ else if(/t\.me\/valpod87\/\d+/.test(h))vpfTrack('post',t);
+ else if(a.classList.contains('lk'))vpfTrack('link',t);
+},true);
+</script>
 </body>
 </html>
