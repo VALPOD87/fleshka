@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Генератор эффекта «облако точек»: загрузи картинку, настрой эффекты и камеру, скачай MP4 или GIF. Работает прямо в браузере.">
+<meta name="description" content="Генератор эффекта «облако точек»: загрузи картинку или видео, настрой эффекты и камеру, скачай MP4 или GIF. Работает прямо в браузере.">
 <meta property="og:title" content="Облако точек VALPOD">
-<meta property="og:description" content="Картинка → облако точек. Эффекты, камера, трек-точки, экспорт MP4 и GIF. Бесплатно, прямо в браузере.">
+<meta property="og:description" content="Картинка или видео → облако точек. Эффекты, камера, трек-точки, экспорт MP4 и GIF. Бесплатно, прямо в браузере.">
 <meta property="og:type" content="website">
 <title>Облако точек VALPOD</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +28,10 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--mono);font-
 #stageWrap{position:fixed;inset:0;right:300px;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg)}
 #stage{position:relative;background:var(--stage);overflow:hidden;outline:1px solid var(--line);max-width:100%;max-height:100%}
 #stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#gl{mix-blend-mode:screen}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips button{padding:5px 8px;font-size:10.5px}
+.chips button[aria-pressed=true]{background:var(--accent);color:var(--ink);border-color:var(--accent);font-weight:600}
 #hud{pointer-events:none}
 #panel{position:fixed;top:0;right:0;bottom:0;width:300px;overflow:auto;background:var(--panel);border-left:1px solid var(--line);padding:14px max(14px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) 14px;display:flex;flex-direction:column;gap:12px}
 #panel h1{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.04em;margin:0}
@@ -112,12 +116,12 @@ body.mob #foot #status{font-size:10px}
 </head>
 <body>
 
-<div id="stageWrap"><div id="stage"><canvas id="gl"></canvas><canvas id="hud"></canvas></div></div>
+<div id="stageWrap"><div id="stage"><canvas id="vlay"></canvas><canvas id="gl"></canvas><canvas id="hud"></canvas></div></div>
 
 <aside id="panel" aria-label="Настройки эффекта">
   <div>
     <h1>POINT<span>·</span>FIELD</h1>
-    <p class="sub">Картинка становится облаком точек. Настрой эффекты и камеру, забери MP4 или GIF. Всё считается у тебя в браузере, картинка никуда не загружается. Сделал <a href="https://t.me/valpod87" target="_blank" rel="noopener">VALPOD</a>.</p>
+    <p class="sub">Картинка или видео на однотонном фоне становится облаком точек. Настрой эффекты и камеру, забери MP4 или GIF. Всё считается у тебя в браузере, картинка никуда не загружается. Сделал <a href="https://t.me/valpod87" target="_blank" rel="noopener">VALPOD</a>.</p>
     <p class="warn" id="inapp" hidden>Похоже, ты во встроенном браузере Instagram — скачивание тут может не сработать. Нажми ⋯ вверху → «Открыть в браузере».</p>
   </div>
 
@@ -127,6 +131,7 @@ body.mob #foot #status{font-size:10px}
       <button id="pSphere">Сфера</button>
       <button id="pWord">VALPOD</button>
       <label class="filebtn">Своя картинка<input id="imgFile" type="file" accept="image/*"></label>
+      <label class="filebtn">Видео<input id="vidFile" type="file" accept="video/*"></label>
     </div>
     <label class="chk"><input id="bgRemove" type="checkbox" checked> Убрать фон (цвет по углам)</label>
     <div class="slider"><span>Плотность</span><input id="density" type="range" min="160" max="560" step="20" value="360"><output id="densityO"></output></div>
@@ -141,6 +146,28 @@ body.mob #foot #status{font-size:10px}
       </select></div>
   </div>
 
+
+  <div class="grp" id="vGrp" hidden>
+    <div class="lbl">Проходы по видео</div>
+    <p class="sub">Видео на однотонном фоне (чёрный, белый, зелёный). Проходы сменяют друг друга; с волной ближние части героя переключаются раньше дальних.</p>
+    <div class="slider"><span>Порог фона</span><input id="vKey" type="range" min="0.04" max="0.45" step="0.01" value="0.16"><output id="vKeyO"></output></div>
+    <div class="chips" id="passChips" role="group" aria-label="Проходы">
+      <button data-pass="clean" aria-pressed="true">Видео</button>
+      <button data-pass="blocks" aria-pressed="true">Глитч-блоки</button>
+      <button data-pass="grey" aria-pressed="true">Серая мозаика</button>
+      <button data-pass="points" aria-pressed="true">Точки</button>
+      <button data-pass="hot" aria-pressed="true">Искры</button>
+    </div>
+    <div class="slider"><span>Смена, кадров</span><input id="vEvery" type="range" min="2" max="40" step="1" value="5"><output id="vEveryO"></output></div>
+    <div class="field"><span>Порядок</span><select id="vOrder" aria-label="Порядок проходов"><option value="seq" selected>По кругу</option><option value="rand">Случайно</option></select></div>
+    <label class="chk"><input id="vWave" type="checkbox" checked> Волна по глубине</label>
+    <div class="slider"><span>Размер блоков</span><input id="vBlock" type="range" min="1" max="4" step="1" value="2"><output id="vBlockO"></output></div>
+    <div class="slider"><span>Сила глитча</span><input id="vGl" type="range" min="0" max="1" step="0.05" value="0.6"><output id="vGlO"></output></div>
+    <div class="slider"><span>Свечение</span><input id="vGlow" type="range" min="0" max="1" step="0.05" value="0.6"><output id="vGlowO"></output></div>
+    <div class="field"><span>Акцент</span><input id="vAcc" type="color" value="#ff6a2a" aria-label="Цвет акцента"></div>
+    <label class="chk"><input id="vNums" type="checkbox" checked> Цифры на блоках</label>
+    <label class="chk"><input id="vTrack" type="checkbox" checked> Трек-метки следят за героем</label>
+  </div>
   <div class="grp">
     <div class="lbl">Сцена</div>
     <div class="field"><span>Сценарий</span>
@@ -310,7 +337,7 @@ body.mob #foot #status{font-size:10px}
     <a id="dlLink" class="dl" hidden></a>
   </div>
 </aside>
-<div id="drop" hidden>Отпусти картинку</div>
+<div id="drop" hidden>Отпусти картинку или видео</div>
 
 <script src="vendor/three.min.js"></script>
 <script src="vendor/mp4-muxer.js"></script>
@@ -327,14 +354,14 @@ const group = new THREE.Group(); scene.add(group);
 
 const W = 300;
 const uniforms = {
-  uTime:{value:0}, uScatter:{value:0}, uDepth:{value:1}, uSize:{value:1.1},
+  uCloud:{value:1}, uTime:{value:0}, uScatter:{value:0}, uDepth:{value:1}, uSize:{value:1.1},
   uWidth:{value:W/2}, uPR:{value:1}, uMode:{value:1}, uWind:{value:1}, uFloat:{value:0.4}, uLoop:{value:1},
   uPulse:{value:0}, uPulseN:{value:3}, uWave:{value:0}, uWaveT:{value:0}, uWaveL:{value:1.5}, uWaveN:{value:1}, uTurb:{value:0},
   uMag:{value:0}, uMagPol:{value:1}, uMagR:{value:60}, uMagPos:{value:new THREE.Vector3()}, uScan:{value:0}, uScanW:{value:1}, uScanN:{value:1}, uHalfH:{value:150}, uTurbN:{value:1}, uFloatN:{value:1}
 };
 const vs = `
-attribute vec3 color; attribute vec4 seed;
-uniform float uTime,uScatter,uDepth,uSize,uWidth,uPR,uWind,uFloat,uLoop,uPulse,uPulseN,uWave,uWaveL,uWaveN,uTurb,uMag,uMagPol,uMagR,uScan,uScanW,uScanN,uHalfH,uTurbN,uFloatN;
+attribute vec3 color; attribute vec4 seed; attribute float vis;
+uniform float uCloud,uTime,uScatter,uDepth,uSize,uWidth,uPR,uWind,uFloat,uLoop,uPulse,uPulseN,uWave,uWaveL,uWaveN,uTurb,uMag,uMagPol,uMagR,uScan,uScanW,uScanN,uHalfH,uTurbN,uFloatN;
 uniform int uMode,uWaveT; uniform vec3 uMagPos;
 varying vec3 vColor; varying float vAlpha;
 void main(){
@@ -370,7 +397,7 @@ void main(){
   p += wind*f;
   vec4 mv = modelViewMatrix*vec4(p,1.0);
   gl_Position = projectionMatrix*mv;
-  gl_PointSize = uSize*uPR*(1100.0/-mv.z)*(1.0-f*0.35);
+  gl_PointSize = uSize*uPR*(1100.0/-mv.z)*(1.0-f*0.35)*vis;
   float lum = dot(color, vec3(0.299,0.587,0.114));
   if(uMode==0) vColor = color;
   else if(uMode==1) vColor = mix(vec3(0.16,0.2,0.32), vec3(1.0), pow(lum,0.8));
@@ -378,7 +405,7 @@ void main(){
   else vColor = mix(vec3(0.35,0.02,0.0), vec3(1.0,0.75,0.6), lum);
   vAlpha = (1.0 - f*0.5) * (0.55 + 0.45*lum);
   vColor = mix(vColor, vec3(0.55,1.0,1.0), clamp(sb,0.0,1.0)*0.8);
-  vAlpha *= 1.0 + sb*1.5;
+  vAlpha *= (1.0 + sb*1.5)*vis*uCloud;
 }`;
 const fs = `
 varying vec3 vColor; varying float vAlpha;
@@ -395,6 +422,7 @@ let points = null, homes = null, seeds = null, count = 0, imgAspect = 1, current
 function rng(seed){ let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
 function buildFrom(img){
+  leaveVideo();
   currentImage = img;
   const N = +$('density').value, r = img.width / img.height; imgAspect = r;
   const w = Math.round(N*Math.sqrt(r)), h = Math.round(N/Math.sqrt(r));
@@ -425,6 +453,7 @@ function buildFrom(img){
   geo.setAttribute('position', new THREE.BufferAttribute(homes, 3));
   geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(col), 3));
   geo.setAttribute('seed', new THREE.BufferAttribute(seeds, 4));
+  geo.setAttribute('vis', new THREE.BufferAttribute(new Float32Array(count).fill(1), 1));
   if (points) { group.remove(points); points.geometry.dispose(); }
   points = new THREE.Points(geo, material); group.add(points);
   uniforms.uWidth.value = (w*scale)/2;
@@ -536,6 +565,7 @@ function setPreset(btn){ ['pSphere','pWord'].forEach(id => $(id).classList.toggl
 $('pSphere').onclick = () => { setPreset('pSphere'); buildFrom(sphereImage()); };
 $('pWord').onclick = async () => { setPreset('pWord'); buildFrom(await wordImage()); };
 function loadFile(file){
+  if (file && file.type.startsWith('video/')) { loadVideo(file).catch(e => status(e.message)); return; }
   if (!file || !file.type.startsWith('image/')) return;
   const url = URL.createObjectURL(file), im = new Image();
   im.onload = () => { setPreset(null); buildFrom(im); URL.revokeObjectURL(url); };
@@ -552,7 +582,7 @@ addEventListener('drop', e => { e.preventDefault(); dragDepth = 0; $('drop').hid
 const bindRange = (id, f, fn) => { const el = $(id), o = $(id+'O');
   const upd = () => { o.textContent = f(+el.value); fn && fn(+el.value); }; el.addEventListener('input', upd); upd(); };
 bindRange('density', v => v, null);
-$('density').addEventListener('change', () => currentImage && buildFrom(currentImage));
+$('density').addEventListener('change', () => videoMode ? buildVideoGrid() : currentImage && buildFrom(currentImage));
 $('bgRemove').onchange = () => currentImage && buildFrom(currentImage);
 bindRange('depth', v => v.toFixed(2), v => uniforms.uDepth.value = v);
 bindRange('size', v => v.toFixed(2), v => uniforms.uSize.value = v);
@@ -595,8 +625,8 @@ $('colorMode').onchange = e => uniforms.uMode.value = +e.target.value;
 $('format').onchange = () => { layoutStage(); };
 
 let playing = true, sceneT = 0, last = performance.now();
-$('play').onclick = () => { playing = !playing; $('play').textContent = playing ? '❚❚ Пауза' : '▶ Играть'; $('play').classList.toggle('on', playing); last = performance.now(); };
-$('time').addEventListener('input', e => { sceneT = +e.target.value * +$('dur').value; if (playing) $('play').click(); });
+$('play').onclick = () => { playing = !playing; if (videoMode) { if (playing) vid.play().catch(() => {}); else vid.pause(); } $('play').textContent = playing ? '❚❚ Пауза' : '▶ Играть'; $('play').classList.toggle('on', playing); last = performance.now(); };
+$('time').addEventListener('input', e => { sceneT = +e.target.value * +$('dur').value; if (playing) $('play').click(); if (videoMode) { trackerReset(); seekTo(sceneT).then(() => { lastVT = vid.currentTime; sampleVideo(); trackerStep(); }); } });
 
 // ---------- camera: presets, joystick, drag, zoom ----------
 const DEG = Math.PI/180, MAXY = 90*DEG, MAXX = 50*DEG;
@@ -680,7 +710,7 @@ function layoutStage(){
   stage.style.width = viewW + 'px'; stage.style.height = viewH + 'px';
   viewDpr = Math.min(document.body.classList.contains('mob') ? 1.5 : 2, devicePixelRatio || 1);
   setRenderSize(viewW*viewDpr, viewH*viewDpr);
-  hud.width = viewW*viewDpr; hud.height = viewH*viewDpr;
+  hud.width = viewW*viewDpr; hud.height = viewH*viewDpr; vlay.width = hud.width; vlay.height = hud.height;
   fitCamera();
 }
 addEventListener('resize', () => { if (!exporting) layoutStage(); });
@@ -702,8 +732,9 @@ function drawHud(ctx, w, h){
     ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
     ctx.beginPath(); ctx.moveTo(cx-6*k, cy); ctx.lineTo(cx+6*k, cy); ctx.moveTo(cx, cy-6*k); ctx.lineTo(cx, cy+6*k); ctx.stroke();
   }
-  if (tracked.length) {
-    const pts = tracked.map(i => { displaced(i, v3); const wx = v3.x, wy = v3.y, wz = v3.z; v3.applyMatrix4(group.matrixWorld).project(camera);
+  const vPts = videoMode && $('vTrack').checked ? videoTrackPts(w, h) : null;
+  if (vPts ? vPts.length : tracked.length) {
+    const pts = vPts || tracked.map(i => { displaced(i, v3); const wx = v3.x, wy = v3.y, wz = v3.z; v3.applyMatrix4(group.matrixWorld).project(camera);
       return [(v3.x*0.5+0.5)*w, (-v3.y*0.5+0.5)*h, homes[i*3]/150, homes[i*3+1]/150, homes[i*3+2]*uniforms.uDepth.value/150, wx, wy, wz]; });
     const lm = $('tLinks').value, la = +$('lAlpha').value, hub = Math.min(pts.length, +$('lHub').value) - 1;
     const seg = (a, b, al) => { ctx.strokeStyle = `rgba(${col},${al})`; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); };
@@ -727,7 +758,7 @@ function drawHud(ctx, w, h){
     ctx.font = `${Math.round(10.5*k)}px "JetBrains Mono", monospace`; ctx.textBaseline = 'middle';
     if (lm === 'hub' && pts[hub]) { ctx.beginPath(); ctx.arc(pts[hub][0], pts[hub][1], s*2.2, 0, Math.PI*2); ctx.stroke(); }
     pts.forEach((p, n) => {
-      const [x, y] = p, i = tracked[n];
+      const [x, y] = p, i = vPts ? p[8] : tracked[n];
       if (pix) ctx.strokeStyle = ctx.fillStyle = `rgb(${lift(pCol[i*3])},${lift(pCol[i*3+1])},${lift(pCol[i*3+2])})`;
       ctx.beginPath();
       if (style === 'brackets') { const c = s*0.55;
@@ -759,16 +790,326 @@ function drawHud(ctx, w, h){
   }
 }
 
+// ---------- VIDEO SOURCE: keyed video → point grid + glitch passes ----------
+const vlay = $('vlay'), vctx = vlay.getContext('2d');
+let vlayDirty = false;
+const vid = document.createElement('video');
+vid.muted = true; vid.playsInline = true; vid.loop = true; vid.preload = 'auto'; vid.crossOrigin = 'anonymous';
+let videoMode = false, vReady = false, seeking = false, lastVT = -1, vUrl = null;
+const keyC = document.createElement('canvas'), keyX = keyC.getContext('2d', {willReadFrequently: true});
+const gridC = document.createElement('canvas'), gridX = gridC.getContext('2d', {willReadFrequently: true});
+let vbg = [0, 0, 0], kw = 0, kh = 0, gw = 0, gh = 0, gA = null, gL = null, gLprev = null, gZ = null, zMin = 0, zMax = 1;
+let visArr = null, colArr = null, vBlocks = [], cellBlock = null, frameIdx = 0;
+const HIST = 8, hist = []; let histI = 0, histN = 0;
+const PASSES = ['clean', 'blocks', 'grey', 'points', 'hot'];
+
+const hh = (a, b) => { let x = (Math.imul(a | 0, 374761393) + Math.imul(b | 0, 668265263)) | 0;
+  x = Math.imul(x ^ (x >>> 13), 1274126177); return ((x ^ (x >>> 16)) >>> 0) / 4294967296; };
+
+function seekTo(t){
+  return new Promise(res => {
+    const target = Math.min(Math.max(0, t), Math.max(0, vid.duration - 0.001));
+    if (Math.abs(vid.currentTime - target) < 1e-4 && vid.readyState >= 2) return res();
+    seeking = true;
+    vid.addEventListener('seeked', () => { seeking = false; res(); }, {once: true});
+    vid.currentTime = target;
+  });
+}
+
+function leaveVideo(){
+  if (!videoMode) return;
+  videoMode = false; vReady = false; vid.pause(); $('vGrp').hidden = true;
+  uniforms.uCloud.value = 1; vlayDirty = true; trackerReset();
+}
+
+async function loadVideo(file){
+  if (!file || !file.type.startsWith('video/')) return;
+  if (vUrl) URL.revokeObjectURL(vUrl);
+  vUrl = URL.createObjectURL(file); vReady = false;
+  vid.src = vUrl;
+  await new Promise((res, rej) => { vid.onloadeddata = res; vid.onerror = () => rej(new Error('Видео не открылось')); });
+  await seekTo(0);
+  setPreset(null); currentImage = null;
+  const vw = vid.videoWidth, vh = vid.videoHeight, ks = Math.min(1, 1280 / Math.max(vw, vh));
+  kw = Math.round(vw*ks); kh = Math.round(vh*ks); keyC.width = kw; keyC.height = kh;
+  for (let i = 0; i < HIST; i++) { if (!hist[i]) hist[i] = document.createElement('canvas'); hist[i].width = kw; hist[i].height = kh; }
+  // background = average of the four corners of the first frame
+  keyX.drawImage(vid, 0, 0, kw, kh);
+  const d = keyX.getImageData(0, 0, kw, kh).data; let r = 0, g = 0, b = 0, n = 0;
+  for (const [cx, cy] of [[0,0],[kw-8,0],[0,kh-8],[kw-8,kh-8]]) for (let y = cy; y < cy+8; y++) for (let x = cx; x < cx+8; x++) {
+    const k = (y*kw + x)*4; r += d[k]; g += d[k+1]; b += d[k+2]; n++; }
+  vbg = [r/n, g/n, b/n];
+  videoMode = true; $('vGrp').hidden = false;
+  const vd = Math.min(15, Math.max(2, Math.floor(vid.duration*2)/2));
+  $('dur').value = vd; $('dur').dispatchEvent(new Event('input'));
+  $('scenario').value = 'static';
+  $('zoom').value = 1.7; $('zoom').dispatchEvent(new Event('input'));
+  buildVideoGrid();
+  histN = 0; trackerReset(); sampleVideo(); trackerStep(); lastVT = vid.currentTime;
+  vReady = true; if (playing) vid.play().catch(() => {});
+}
+$('vidFile').onchange = e => loadVideo(e.target.files[0]).catch(err => status(err.message));
+
+function buildVideoGrid(){
+  const N = +$('density').value, r = kw / kh; imgAspect = r;
+  gw = Math.round(N*Math.sqrt(r)); gh = Math.round(N/Math.sqrt(r));
+  gridC.width = gw; gridC.height = gh;
+  count = gw*gh; const scale = W / Math.max(gw, gh), R0 = rng(11);
+  homes = new Float32Array(count*3); seeds = new Float32Array(count*4);
+  colArr = new Float32Array(count*3); visArr = new Float32Array(count);
+  pLum = new Float32Array(count); pEdge = new Float32Array(count); pCol = colArr;
+  gA = new Float32Array(count); gL = new Float32Array(count); gZ = new Float32Array(count); gLprev = null;
+  for (let j = 0; j < gh; j++) for (let i = 0; i < gw; i++) {
+    const q = j*gw + i;
+    homes[q*3] = (i - gw/2 + R0() - 0.5)*scale; homes[q*3+1] = -(j - gh/2 + R0() - 0.5)*scale;
+    for (let c = 0; c < 4; c++) seeds[q*4+c] = R0();
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(homes, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(colArr, 3));
+  geo.setAttribute('seed', new THREE.BufferAttribute(seeds, 4));
+  geo.setAttribute('vis', new THREE.BufferAttribute(visArr, 1));
+  if (points) { group.remove(points); points.geometry.dispose(); }
+  points = new THREE.Points(geo, material); group.add(points);
+  uniforms.uWidth.value = (gw*scale)/2; uniforms.uHalfH.value = (gh*scale)/2;
+  tracked = []; links = [];
+  buildVideoBlocks(); fitCamera();
+  if (vReady || vid.readyState >= 2) { sampleVideo(); trackerReset(); trackerStep(); }
+}
+
+// random quadtree of blocks in grid cells
+function buildVideoBlocks(){
+  const top = [6, 12, 20, 32][+$('vBlock').value - 1], R = rng(23); vBlocks = []; cellBlock = new Int32Array(gw*gh);
+  const split = (x, y, w, h) => {
+    if (x >= gw || y >= gh) return;
+    w = Math.min(w, gw - x); h = Math.min(h, gh - y);
+    if (Math.max(w, h) > 2 && R() < (Math.max(w, h) > top*0.6 ? 0.62 : 0.45)) {
+      const hw = Math.ceil(w/2), hh2 = Math.ceil(h/2);
+      split(x, y, hw, hh2); split(x + hw, y, w - hw, hh2); split(x, y + hh2, hw, h - hh2); split(x + hw, y + hh2, w - hw, h - hh2);
+      return;
+    }
+    if (w < 1 || h < 1) return;
+    const id = vBlocks.length;
+    vBlocks.push({x, y, w, h, id, r1: R(), r2: R(), r3: R(), lab: 1000 + Math.floor(R()*8999), cov: 0, dn: 0, lum: 0, pass: 'clean'});
+    for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) cellBlock[j*gw + i] = id;
+  };
+  for (let y = 0; y < gh; y += top) for (let x = 0; x < gw; x += top) split(x, y, top, top);
+}
+
+function boxBlur(src, w, h, r){
+  const tmp = new Float32Array(w*h), out = new Float32Array(w*h);
+  for (let j = 0; j < h; j++) { let acc = 0; const o = j*w;
+    for (let i = -r; i <= r; i++) acc += src[o + Math.min(w-1, Math.max(0, i))];
+    for (let i = 0; i < w; i++) { tmp[o+i] = acc/(2*r+1); acc += src[o + Math.min(w-1, i+r+1)] - src[o + Math.max(0, i-r)]; } }
+  for (let i = 0; i < w; i++) { let acc = 0;
+    for (let j = -r; j <= r; j++) acc += tmp[Math.min(h-1, Math.max(0, j))*w + i];
+    for (let j = 0; j < h; j++) { out[j*w+i] = acc/(2*r+1); acc += tmp[Math.min(h-1, j+r+1)*w + i] - tmp[Math.max(0, j-r)*w + i]; } }
+  return out;
+}
+
+// key the current video frame, fill grid (alpha, luminance, colour, pseudo-depth)
+function sampleVideo(){
+  if (!kw || vid.readyState < 2) return;
+  keyX.globalCompositeOperation = 'copy'; keyX.drawImage(vid, 0, 0, kw, kh); keyX.globalCompositeOperation = 'source-over';
+  const id = keyX.getImageData(0, 0, kw, kh), d = id.data, th = +$('vKey').value*441, soft = 0.07*441;
+  const [br, bgc, bb] = vbg;
+  for (let k = 0; k < d.length; k += 4) {
+    const dist = Math.hypot(d[k] - br, d[k+1] - bgc, d[k+2] - bb);
+    d[k+3] = Math.max(0, Math.min(255, (dist - th)/soft*255));
+  }
+  keyX.putImageData(id, 0, 0);
+  histI = (histI + 1) % HIST; const hc = hist[histI].getContext('2d');
+  hc.globalCompositeOperation = 'copy'; hc.drawImage(keyC, 0, 0); histN = Math.min(HIST, histN + 1);
+  gridX.globalCompositeOperation = 'copy'; gridX.drawImage(keyC, 0, 0, gw, gh);
+  const g = gridX.getImageData(0, 0, gw, gh).data;
+  if (gL) gLprev = gL.slice();
+  for (let q = 0; q < count; q++) {
+    const k = q*4, a = g[k+3]/255, R = g[k]/255, G = g[k+1]/255, B = g[k+2]/255;
+    gA[q] = a; gL[q] = 0.299*R + 0.587*G + 0.114*B;
+    colArr[q*3] = R; colArr[q*3+1] = G; colArr[q*3+2] = B; pLum[q] = gL[q];
+  }
+  // thicker middle of the silhouette is closer to the camera; brightness adds relief
+  const thick = boxBlur(boxBlur(gA, gw, gh, Math.max(2, Math.round(gw*0.05))), gw, gh, Math.max(2, Math.round(gw*0.05)));
+  zMin = 1e9; zMax = -1e9;
+  for (let q = 0; q < count; q++) {
+    const z = gA[q] > 0.35 ? ((gL[q] - 0.5)*0.55 + (thick[q] - 0.5)*1.3)*90 : 0;
+    gZ[q] = z; homes[q*3+2] = z;
+    if (gA[q] > 0.35) { if (z < zMin) zMin = z; if (z > zMax) zMax = z; }
+  }
+  if (zMax <= zMin) { zMin = 0; zMax = 1; }
+  for (const b of vBlocks) {
+    let ca = 0, cz = 0, cl = 0, n = 0;
+    for (let j = b.y; j < b.y + b.h; j++) for (let i = b.x; i < b.x + b.w; i++) { const q = j*gw + i; ca += gA[q]; if (gA[q] > 0.35) { cz += gZ[q]; cl += gL[q]; n++; } }
+    b.cov = ca/(b.w*b.h); b.dn = n ? (cz/n - zMin)/(zMax - zMin) : 0; b.lum = n ? cl/n : 0;
+  }
+  const geo = points.geometry;
+  geo.attributes.position.needsUpdate = true; geo.attributes.color.needsUpdate = true;
+  frameIdx = Math.round(vid.currentTime*30);
+}
+
+// which pass each block shows right now
+function activePasses(){ const on = [...document.querySelectorAll('#passChips button')].filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.pass); return on.length ? on : ['clean']; }
+function updatePasses(){
+  if (!vBlocks.length) return;
+  const on = activePasses(), n = on.length, every = +$('vEvery').value, wave = $('vWave').checked, ord = $('vOrder').value;
+  for (const b of vBlocks) {
+    const off = wave ? Math.round((1 - b.dn)*every*1.6) : 0, ep = Math.floor((frameIdx + off)/every);
+    b.pass = on[ord === 'rand' ? Math.floor(hh(ep, 977)*n) : ((ep % n) + n) % n];
+  }
+  for (let q = 0; q < count; q++) {
+    const b = vBlocks[cellBlock[q]];
+    visArr[q] = gA[q] > 0.35 && (b.pass === 'points' || (b.pass === 'hot' && seeds[q*4] < 0.12)) ? 1 : 0;
+  }
+  points.geometry.attributes.vis.needsUpdate = true;
+  uniforms.uCloud.value = 1;
+}
+
+// screen rectangle of the grid plane (front-facing)
+const pv = new THREE.Vector3();
+function planeRect(w, h){
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; const hw = uniforms.uWidth.value, hh3 = uniforms.uHalfH.value;
+  for (const [sx, sy] of [[-1,-1],[1,-1],[-1,1],[1,1]]) {
+    pv.set(sx*hw, sy*hh3, 0).applyMatrix4(group.matrixWorld).project(camera);
+    const x = (pv.x*0.5 + 0.5)*w, y = (-pv.y*0.5 + 0.5)*h;
+    x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+  }
+  return [x0, y0, x1 - x0, y1 - y0];
+}
+
+const glowC = document.createElement('canvas'), glowX = glowC.getContext('2d');
+function drawVideoLayer(ctx, w, h){
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, w, h); vlayDirty = true;
+  if (!vBlocks.length || !kw) return;
+  const [rx, ry, rw, rh] = planeRect(w, h), cw = rw/gw, ch = rh/gh, sxk = kw/gw, syk = kh/gh;
+  const gl = +$('vGl').value, k = Math.min(w, h)/700, ep3 = Math.floor(frameIdx/3);
+  const acc = $('vAcc').value, nums = $('vNums').checked;
+  ctx.lineWidth = Math.max(1, 0.9*k);
+  ctx.font = `${Math.round(10*k)}px "JetBrains Mono", monospace`; ctx.textBaseline = 'top';
+  const src = (b, dx, dy, img) => ctx.drawImage(img || keyC, (b.x + dx)*sxk, (b.y + dy)*syk, b.w*sxk, b.h*syk, rx + b.x*cw, ry + b.y*ch, b.w*cw + 0.5, b.h*ch + 0.5);
+  const tint = (b, color) => { ctx.globalCompositeOperation = 'source-atop'; ctx.fillStyle = color; ctx.fillRect(rx + b.x*cw, ry + b.y*ch, b.w*cw + 0.5, b.h*ch + 0.5); ctx.globalCompositeOperation = 'source-over'; };
+  const outline = (b, a) => { ctx.strokeStyle = `rgba(225,240,245,${a})`; ctx.strokeRect(rx + b.x*cw + 0.5, ry + b.y*ch + 0.5, b.w*cw - 1, b.h*ch - 1); };
+  const marks = [];
+  for (const b of vBlocks) {
+    if (b.cov < 0.04 || b.pass === 'points') continue;
+    const r = hh(b.id, ep3), r2 = hh(b.id + 7777, ep3), r3 = hh(b.id + 3131, ep3);
+    if (b.pass === 'clean') { src(b, 0, 0); continue; }
+    if (b.pass === 'blocks') {
+      if (r > gl*0.75) { src(b, 0, 0); }
+      else if (r2 < 0.34 && histN > 3) { src(b, 0, 0, hist[(histI - 1 - Math.floor(r3*(histN - 2)) + HIST*2) % HIST]); outline(b, 0.55); }
+      else if (r2 < 0.6) { src(b, Math.round((r3 - 0.5)*2*b.w), Math.round((b.r1 - 0.5)*b.h*0.6)); outline(b, 0.45); }
+      else if (r2 < 0.82) { if (r3 < 0.5) outline(b, 0.35); }
+      else { src(b, 0, 0); if (b.cov > 0.4) tint(b, 'rgba(255,255,255,.75)'); outline(b, 0.6); }
+      if (nums && b.r3 < 0.035 && b.cov > 0.3) marks.push(['n', b]);
+      continue;
+    }
+    if (b.pass === 'grey') {
+      if (b.cov < 0.25) continue;
+      const v = Math.round(255*(0.14 + 0.62*b.lum)), a = (0.35 + 0.5*b.cov)*(0.7 + 0.3*b.r1);
+      ctx.fillStyle = `rgba(${v},${v},${Math.min(255, v + 8)},${a.toFixed(3)})`;
+      ctx.fillRect(rx + b.x*cw, ry + b.y*ch, b.w*cw + 0.5, b.h*ch + 0.5);
+      if (b.r1 < 0.3) outline(b, 0.22);
+      continue;
+    }
+    if (b.pass === 'hot') {
+      ctx.globalAlpha = 0.42; src(b, 0, 0); ctx.globalAlpha = 1;
+      if (b.cov > 0.45 && Math.max(b.w, b.h) <= 4 && r < 0.3 + gl*0.3) { src(b, 0, 0); tint(b, 'rgba(255,255,255,.95)'); }
+      if (b.r2 > 0.955 && b.cov > 0.3) { src(b, 0, 0); tint(b, acc + 'cc'); }
+      if (b.r1 > 0.78 && r2 < 0.45 && b.cov > 0.3) marks.push(['x', b, r3]);
+      if (b.cov > 0.4) for (let p = 0; p < 2; p++) if (hh(b.id*3 + p, ep3) < 0.5) marks.push(['d', b, hh(b.id + p*11, 5), hh(b.id - p*13, 9)]);
+      continue;
+    }
+  }
+  // glow: blurred bright copy added on top
+  const gk = +$('vGlow').value;
+  if (gk > 0) {
+    const gw2 = Math.max(1, Math.round(w/4)), gh2 = Math.max(1, Math.round(h/4));
+    if (glowC.width !== gw2 || glowC.height !== gh2) { glowC.width = gw2; glowC.height = gh2; }
+    glowX.clearRect(0, 0, gw2, gh2); glowX.filter = `blur(${(3*k).toFixed(1)}px) brightness(1.35) contrast(1.6)`;
+    glowX.drawImage(vlay === ctx.canvas ? vlay : ctx.canvas, 0, 0, gw2, gh2); glowX.filter = 'none';
+    ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = gk*0.55; ctx.drawImage(glowC, 0, 0, w, h);
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  }
+  // crosses, dust and block numbers on top
+  ctx.fillStyle = 'rgba(235,245,250,.9)'; ctx.strokeStyle = 'rgba(255,255,255,.95)';
+  for (const m of marks) {
+    const b = m[1], x = rx + b.x*cw, y = ry + b.y*ch;
+    if (m[0] === 'n') ctx.fillText(String(b.lab), x + b.w*cw + 3*k, y);
+    else if (m[0] === 'x') { const cx = x + (m[2] > 0.5 ? b.w*cw : 0), cy = y + (b.r3 > 0.5 ? b.h*ch : 0), s = (4 + 6*m[2])*k;
+      ctx.beginPath(); ctx.moveTo(cx - s, cy); ctx.lineTo(cx + s, cy); ctx.moveTo(cx, cy - s); ctx.lineTo(cx, cy + s); ctx.stroke(); }
+    else { const s = Math.max(1, 1.4*k); ctx.fillRect(x + m[2]*b.w*cw, y + m[3]*b.h*ch, s, s); }
+  }
+}
+
+// ---------- tracker: block matching on the grid luminance ----------
+let vtr = [], vtrNext = 1;
+function trackerReset(){ vtr = []; gLprev = null; }
+function spawnTrack(){
+  if (!gA) return null;
+  let best = null, bd = -1;
+  for (let t = 0; t < 24; t++) {
+    const q = Math.floor(Math.random()*count); if (gA[q] < 0.6) continue;
+    const x = q % gw, y = Math.floor(q/gw);
+    const d = vtr.reduce((m, p) => Math.min(m, (p.x - x)**2 + (p.y - y)**2), 1e9);
+    if (d > bd) { bd = d; best = {x, y, id: vtrNext++}; }
+  }
+  return best;
+}
+function trackerStep(){
+  if (!gA) return;
+  const n = +$('tCount').value, R = Math.max(2, Math.round(gw/60)), P = 2;
+  if (gLprev) for (const p of vtr) {
+    const px = Math.round(p.x), py = Math.round(p.y); let bx = 0, by = 0, be = 1e9;
+    for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+      let e = 0;
+      for (let v = -P; v <= P; v++) for (let u = -P; u <= P; u++) {
+        const ax = Math.min(gw-1, Math.max(0, px + u)), ay = Math.min(gh-1, Math.max(0, py + v));
+        const cx = Math.min(gw-1, Math.max(0, px + dx + u)), cy = Math.min(gh-1, Math.max(0, py + dy + v));
+        e += Math.abs(gLprev[ay*gw + ax] - gL[cy*gw + cx]);
+      }
+      e += (dx*dx + dy*dy)*0.002;
+      if (e < be) { be = e; bx = dx; by = dy; }
+    }
+    p.x = Math.min(gw-1, Math.max(0, p.x + bx)); p.y = Math.min(gh-1, Math.max(0, p.y + by)); p.err = be;
+  }
+  vtr = vtr.filter(p => gA[Math.round(p.y)*gw + Math.round(p.x)] > 0.5 && (p.err === undefined || p.err < 2.2));
+  vtr.sort((a, b) => a.id - b.id); vtr = vtr.slice(0, n);
+  let guard = 0; while (vtr.length < n && guard++ < n*3) { const s = spawnTrack(); if (s) vtr.push(s); }
+}
+// marker list for the HUD: [x, y, X, Y, Z, wx, wy, wz, pointIndex], ordered left to right
+function videoTrackPts(w, h){
+  const [rx, ry, rw, rh] = planeRect(w, h);
+  return vtr.map(p => {
+    const q = Math.round(p.y)*gw + Math.round(p.x), z = gZ ? gZ[q] : 0;
+    return [rx + (p.x + 0.5)/gw*rw, ry + (p.y + 0.5)/gh*rh, homes[q*3]/150, homes[q*3+1]/150, z*uniforms.uDepth.value/150, homes[q*3], homes[q*3+1], z, q, p.x];
+  }).sort((a, b) => a[9] - b[9]);
+}
+
+// ---------- video panel controls ----------
+bindRange('vKey', v => v.toFixed(2), () => { if (videoMode && !vid.playing) { sampleVideo(); } });
+bindRange('vEvery', v => String(v), null);
+bindRange('vBlock', v => String(v), () => { if (videoMode) { buildVideoBlocks(); sampleVideo(); } });
+bindRange('vGl', v => v.toFixed(2), null);
+bindRange('vGlow', v => v.toFixed(2), null);
+document.querySelectorAll('#passChips button').forEach(b => b.addEventListener('click', () => b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'))));
+$('vTrack').onchange = () => trackerReset();
+$('tCount').addEventListener('input', () => { if (videoMode) trackerStep(); });
+
 // ---------- preview loop ----------
 let exporting = false;
 function frame(now){
   if (!exporting) {
     const D = +$('dur').value;
-    if (playing) { sceneT = (sceneT + Math.min(0.1, (now-last)/1000)) % D; $('time').value = (sceneT/D).toFixed(3); }
+    if (playing && !videoMode) { sceneT = (sceneT + Math.min(0.1, (now-last)/1000)) % D; $('time').value = (sceneT/D).toFixed(3); }
     last = now;
+    if (videoMode && vReady) {
+      if (playing) { if (vid.paused) vid.play().catch(() => {}); sceneT = vid.currentTime; $('time').value = (sceneT/D).toFixed(3); }
+      if (vid.currentTime !== lastVT && !seeking) { const back = vid.currentTime < lastVT; lastVT = vid.currentTime; if (back) trackerReset(); sampleVideo(); trackerStep(); }
+    }
     updateCam();
     applyScene(sceneT);
+    if (videoMode) updatePasses(sceneT);
     renderer.render(scene, camera);
+    if (videoMode) drawVideoLayer(vctx, vlay.width, vlay.height); else if (vlayDirty) { vctx.clearRect(0, 0, vlay.width, vlay.height); vlayDirty = false; }
     drawHud(hctx, hud.width, hud.height);
   }
   requestAnimationFrame(frame);
@@ -805,7 +1146,7 @@ async function encodeMp4(fw, fh, fps, frames, comp, cctx){
   enc.configure(config);
   for (let i = 0; i < frames; i++) {
     if (err) throw err;
-    renderAt(i/fps, fw, fh, comp, cctx);
+    await renderAtA(i/fps, fw, fh, comp, cctx);
     const vf = new VideoFrame(comp, {timestamp: Math.round(i*1e6/fps), duration: Math.round(1e6/fps)});
     enc.encode(vf, {keyFrame: i % (fps*2) === 0}); vf.close();
     while (enc.encodeQueueSize > 6) await new Promise(r => setTimeout(r, 4));
@@ -833,14 +1174,15 @@ function renderAt(t, fw, fh, comp, cctx){
   renderer.render(scene, camera);
   cctx.setTransform(1,0,0,1,0,0);
   cctx.fillStyle = '#000'; cctx.fillRect(0, 0, fw, fh);
-  cctx.drawImage(glc, 0, 0, fw, fh);
+  if (videoMode) { updatePasses(t); renderer.render(scene, camera); drawVideoLayer(vlOffCtx, fw, fh); cctx.drawImage(vlOff, 0, 0); cctx.globalCompositeOperation = 'lighter'; }
+  cctx.drawImage(glc, 0, 0, fw, fh); cctx.globalCompositeOperation = 'source-over';
   drawHud(hudCtx, fw, fh); cctx.drawImage(hudOff, 0, 0);
 }
 async function encodeGif(gw, gh, fps, frames, comp, cctx){
   const {GIFEncoder, quantize, applyPalette} = await import('./vendor/gifenc.esm.js');
   const gif = GIFEncoder(), delay = Math.round(1000/fps);
   for (let i = 0; i < frames; i++) {
-    renderAt(i/fps, gw, gh, comp, cctx);
+    await renderAtA(i/fps, gw, gh, comp, cctx);
     const data = cctx.getImageData(0, 0, gw, gh).data;
     const palette = quantize(data, 256), index = applyPalette(data, palette);
     gif.writeFrame(index, gw, gh, {palette, delay});
@@ -849,6 +1191,11 @@ async function encodeGif(gw, gh, fps, frames, comp, cctx){
   gif.finish();
   return new Blob([gif.bytes()], {type: 'image/gif'});
 }
+async function renderAtA(t, fw, fh, comp, cctx){
+  if (videoMode) { await seekTo(t); sampleVideo(); trackerStep(); }
+  renderAt(t, fw, fh, comp, cctx);
+}
+const vlOff = document.createElement('canvas'), vlOffCtx = vlOff.getContext('2d');
 const hudOff = document.createElement('canvas'), hudCtx = hudOff.getContext('2d');
 
 async function runExport(kind){
@@ -861,7 +1208,8 @@ async function runExport(kind){
   rotY = tRotY; rotX = tRotX; zoom = tZoom;
   const comp = document.createElement('canvas'); comp.width = fw; comp.height = fh;
   const cctx = comp.getContext('2d', {willReadFrequently: kind === 'gif'});
-  hudOff.width = fw; hudOff.height = fh; hudCtx.clearRect(0, 0, fw, fh);
+  hudOff.width = fw; hudOff.height = fh; hudCtx.clearRect(0, 0, fw, fh); vlOff.width = fw; vlOff.height = fh;
+  if (videoMode) { vid.pause(); trackerReset(); }
   try {
     setRenderSize(fw, fh); fitCamera();
     let blob = null, ext = kind;
@@ -873,13 +1221,13 @@ async function runExport(kind){
     if (!blob) throw new Error('этот браузер не умеет кодировать видео. Открой страницу в Chrome или Safari на компьютере.');
     progress(1);
     const tag = $('format').selectedOptions[0].textContent.split(' ')[0].replace(':', 'x');
-    const name = `tochki-valpod_${tag}_${D}s.${ext}`;
+    const name = `tochki-valpod_${videoMode ? 'video_' : ''}${tag}_${D}s.${ext}`;
     saveBlob(blob, name);
     status(`Готово${ext === 'webm' ? ' (WebM: этот браузер не умеет MP4)' : ''}. Если файл не скачался сам — нажми ссылку ниже.`);
   } catch (e) {
     status('Не получилось: ' + (e && e.message || e));
   } finally {
-    exporting = false; $('render').disabled = $('renderGif').disabled = false; layoutStage();
+    exporting = false; $('render').disabled = $('renderGif').disabled = false; layoutStage(); if (videoMode) { trackerReset(); if (playing) vid.play().catch(() => {}); }
   }
 }
 $('render').onclick = () => runExport('mp4');
