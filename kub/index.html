@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Куб времени VALPOD</title>
+<meta name="description" content="Генератор эффекта «куб времени» (xy + t): видео раскладывается в куб, где глубина — это время. Тянешь плейхед — видео погружается и оставляет шлейф. Экспорт MP4.">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090b;--panel:#0e1317;--line:#1d262c;--text:#e8eef1;--mute:#7d8a92;--cyan:#22e4f0;--red:#ff4d5e}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:13px/1.45 Inter,system-ui,sans-serif}
+#app{display:grid;grid-template-columns:1fr 300px;height:100vh}
+#stage{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#020303}
+#stage canvas{box-shadow:0 0 0 1px #161d22;border-radius:6px;touch-action:none}
+#hint{position:absolute;left:16px;bottom:14px;font:11px "JetBrains Mono",monospace;color:#56636b;letter-spacing:.03em;pointer-events:none}
+#tc{position:absolute;font:11px "JetBrains Mono",monospace;color:var(--cyan);pointer-events:none;transform:translate(14px,-50%);text-shadow:0 0 6px #000}
+#rec{position:absolute;left:16px;top:14px;font:11px "JetBrains Mono",monospace;color:var(--red);display:none}
+#panel{background:var(--panel);border-left:1px solid var(--line);padding:18px 16px;display:flex;flex-direction:column;gap:14px}
+h1{font:700 17px Unbounded,sans-serif;margin:0}
+h1 span{color:var(--cyan)}
+.sub{color:var(--mute);font-size:12px;margin-top:2px}
+#drop{border:1px dashed #2c3a43;border-radius:12px;padding:22px 14px;text-align:center;color:var(--mute);cursor:pointer;transition:.15s}
+#drop:hover,#drop.on{border-color:var(--cyan);color:var(--text)}
+#drop b{display:block;color:var(--text);font-weight:600;margin-bottom:4px}
+#prog{height:3px;background:#1a2329;border-radius:2px;overflow:hidden}
+#prog i{display:block;height:100%;width:0;background:var(--cyan);transition:width .1s}
+button{width:100%;padding:12px;border-radius:12px;border:1px solid #26313a;background:#151c21;color:var(--text);font:600 14px Inter;cursor:pointer;transition:.15s}
+button.go{background:var(--cyan);border-color:var(--cyan);color:#041014}
+button.stop{background:var(--red);border-color:var(--red);color:#fff}
+button:disabled{opacity:.5;cursor:default}
+.note{color:var(--mute);font-size:12px}
+.zoom{display:grid;grid-template-columns:70px 1fr 44px;gap:8px;align-items:center;margin-bottom:10px;color:#c4cdd2}.zoom input{accent-color:var(--cyan);width:100%}.zoom output{font:11px 'JetBrains Mono',monospace;color:var(--mute);text-align:right}
+.seg{display:flex;gap:6px}.seg button{padding:9px 6px;font-size:12px;font-weight:500}.seg button.on{border-color:var(--cyan);color:var(--cyan)}
+.foot{margin-top:auto;color:#56636b;font-size:11px}
+.foot a{color:var(--cyan)}
+@media (max-width:820px){#app{grid-template-columns:1fr;grid-template-rows:62vh auto;height:auto}#panel{border-left:0}}
+</style>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    
+    <div id="tc"></div>
+    <div id="hint">тяни циановую точку — время идёт · мышь — ракурс · колесо — наезд</div>
+  </div>
+  <div id="panel">
+    <div><h1>Куб времени <span>VALPOD</span></h1><div class="sub">xy + t: видео, где глубина — это время</div></div>
+    <div>
+      <div id="drop"><b>Загрузить видео</b>перетащи сюда или нажми<br><small>лучше статичная камера и много движения</small></div>
+      <input type="file" id="file" accept="video/*" hidden>
+      <div id="prog" style="margin-top:8px"><i></i></div>
+      <div class="note" id="srcInfo" style="margin-top:6px">Сейчас — демо-сцена.</div>
+    </div>
+    <div>
+      <label class="zoom">Плейхед<input type="range" id="phS" min="0" max="0.995" step="0.001" value="0"><output id="phO">00:00.0</output></label>
+      <label class="zoom">Масштаб<input type="range" id="zoom" min="0.3" max="3" step="0.01" value="1"><output id="zoomO">1.00×</output></label>
+      <div class="seg"><button id="mOrbit" class="on">Облёт по орбите</button><button id="mStatic">Статичная камера</button></div>
+      <div class="note" id="modeNote" style="margin:8px 0 10px">Камера облетает куб от текущего ракурса, видео погружается до конца.</div>
+      <button id="prevBtn">▶ Превью</button>
+      <button class="go" id="recBtn" style="margin-top:8px">Скачать MP4</button>
+      <div class="note" id="expInfo" style="margin-top:8px"></div>
+    </div>
+    <div class="foot">Идея эффекта — <a href="https://www.instagram.com/reel/DdaH9kpg4iA/">@bradleytangonan</a>. Генератор — VALPOD.</div>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from './vendor/OrbitControls.js';
+const $ = id => document.getElementById(id);
+
+// ---------- download ----------
+let dl = null;
+try { window.claude?.use?.('downloads').then(d => dl = d).catch(() => {}); } catch (e) {}
+async function saveFile(name, blob) {
+  if (dl) { try { await dl.save({ filename: name, data: blob }); return; } catch (e) { if (e?.code === 'declined') return; } }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+}
+
+// ---------- renderer ----------
+const OUT_W = 1080, OUT_H = 1920, PREVIEW = 0.5;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setClearColor('#000000');
+const cv = renderer.domElement;
+$('stage').appendChild(cv);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, OUT_W / OUT_H, 0.01, 100);
+function setRes(k) { renderer.setSize(Math.round(OUT_W * k), Math.round(OUT_H * k), false); }
+function fit() {
+  const st = $('stage').getBoundingClientRect();
+  const k = Math.min((st.width - 32) / OUT_W, (st.height - 32) / OUT_H);
+  cv.style.width = Math.round(OUT_W * k) + 'px'; cv.style.height = Math.round(OUT_H * k) + 'px';
+}
+setRes(PREVIEW); addEventListener('resize', fit);
+
+// ---------- shader ----------
+const mat = new THREE.ShaderMaterial({
+  glslVersion: THREE.GLSL3, side: THREE.BackSide, depthWrite: false,
+  uniforms: { vol: { value: null }, hs: { value: new THREE.Vector3(.8, .5, .65) }, zc: { value: .65 }, nFr: { value: 150 } },
+  vertexShader: `out vec3 vPos; void main(){ vPos = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+  fragmentShader: `
+    precision highp float; precision highp sampler3D;
+    uniform sampler3D vol; uniform vec3 hs; uniform float zc; uniform float nFr;
+    in vec3 vPos; out vec4 outColor;
+    vec3 S(vec3 p){ vec3 u = clamp(p/hs*0.5+0.5, 0.0, 1.0); return texture(vol, vec3(u.x, 1.0-u.y, 1.0-u.z)).rgb; }
+    float edgeAt(vec3 p){ vec3 e = (hs - abs(p)) / (fwidth(p)*1.2 + 1e-5); float m = max(min(e.x,e.y), min(max(e.x,e.y), e.z)); return 1.0 - smoothstep(0.0, 1.0, m); }
+    void main(){
+      vec3 o = cameraPosition, dir = normalize(vPos - o), inv = 1.0/dir;
+      vec3 a0 = (-hs - o)*inv, a1 = (hs - o)*inv, mn = min(a0,a1), mx = max(a0,a1);
+      float tn = max(max(mn.x,mn.y),mn.z), tf = min(min(mx.x,mx.y),mx.z);
+      float te = max(tn, 0.0);
+      if (tf < te) discard;
+      // твёрдая (несыгранная) часть: z <= zc
+      float tS = 1e9;
+      float ze = o.z + dir.z*te;
+      if (ze <= zc) tS = te; else if (dir.z < 0.0) { float t = (zc - o.z)/dir.z; if (t <= tf) tS = t; }
+      // дымка: сыгранные кадры с затуханием
+      float tEnd = min(tS, tf), len = max(0.0, tEnd - te);
+      vec3 acc = vec3(0.0); float al = 0.0;
+      if (len > 0.0) {
+        float st = max(2.0*hs.z/nFr, len/180.0);
+        float ka = 1.0 - exp(-1.15 * st);
+        for (int i = 0; i < 180; i++) {
+          float t = te + st*(float(i)+0.5); if (t > tEnd || al > 0.98) break;
+          vec3 c = S(o + dir*t);
+          acc += (1.0-al)*ka*c*0.72; al += (1.0-al)*ka;
+        }
+      }
+      vec3 col = acc;
+      if (tS < 1e8) {
+        vec3 p = o + dir*tS; vec3 c = S(p);
+        vec3 e = hs - abs(p);
+        bool front = abs(p.z - zc) < 1e-3 && tS > te + 1e-5 || (tS == te && abs(p.z - zc) < 1e-3);
+        if (!front) { if (e.x < e.y && e.x < e.z) c *= 0.8; else if (e.y < e.z) c *= 0.9; }
+        col += (1.0-al)*c; al = 1.0;
+      }
+      // рамка бруска (передние рёбра и задние сквозь дымку)
+      float ef = (tn > 0.0) ? edgeAt(o + dir*tn) : 0.0;
+      float eb = edgeAt(o + dir*tf);
+      // рамка текущего кадра
+      float ec = 0.0;
+      if (abs(dir.z) > 1e-4) { float t = (zc - o.z)/dir.z; if (t > 0.0) { vec3 p = o + dir*t; vec2 d = (hs.xy - abs(p.xy)); if (d.x > -1e-3 && d.y > -1e-3) { vec2 w = fwidth(p.xy)*1.2 + 1e-5; ec = 1.0 - smoothstep(0.0, 1.0, min(d.x/w.x, d.y/w.y)); } } }
+      col = mix(col, vec3(1.0), max(ef*0.55, max(eb*0.35*(1.0-al*0.7), ec*0.7)));
+      al = max(al, max(ef*0.55, max(eb*0.35, ec*0.7)));
+      outColor = vec4(col, 1.0);
+    }`
+});
+const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), mat); scene.add(box);
+const hs = mat.uniforms.hs.value;
+
+// плейхед-точка
+const dotTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.18, 'rgba(34,228,240,1)'); gr.addColorStop(.42, 'rgba(34,228,240,.35)'); gr.addColorStop(1, 'rgba(34,228,240,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
+const handle = new THREE.Sprite(new THREE.SpriteMaterial({ map: dotTex, depthTest: false, transparent: true, sizeAttenuation: false }));
+handle.scale.set(0.07, 0.07 * OUT_W / OUT_H, 1);
+handle.renderOrder = 10; scene.add(handle);
+
+// ---------- volume ----------
+let tex = null, srcLen = 10, cut = 0;
+function setVolume(data, w, h, d) {
+  if (tex) tex.dispose();
+  tex = new THREE.Data3DTexture(data, w, h, d);
+  tex.format = THREE.RGBAFormat; tex.type = THREE.UnsignedByteType;
+  tex.minFilter = tex.magFilter = THREE.LinearFilter; tex.unpackAlignment = 1; tex.needsUpdate = true;
+  mat.uniforms.vol.value = tex; mat.uniforms.nFr.value = d;
+  const asp = w / h;
+  hs.set(asp * 0.5, 0.5, 0.62 * Math.max(1, asp * 0.75));
+  box.geometry.dispose(); box.geometry = new THREE.BoxGeometry(hs.x * 2, hs.y * 2, hs.z * 2);
+  setCut(0); homeView();
+}
+function setCut(c) {
+  cut = Math.min(0.995, Math.max(0, c));
+  const zc = hs.z - cut * 2 * hs.z;
+  mat.uniforms.zc.value = zc; handle.position.set(0, 0, zc);
+  const sl = $('phS'); if (sl) { sl.value = cut; const t = cut * srcLen; $('phO').textContent = `${String(Math.floor(t / 60)).padStart(2, '0')}:${(t % 60).toFixed(1).padStart(4, '0')}`; }
+}
+$('phS').addEventListener('input', e => setCut(+e.target.value));
+
+function demoVolume() {
+  const w = 384, h = 216, d = 200, data = new Uint8Array(w * h * d * 4);
+  const rnd = (s => () => (s = (s * 16807) % 2147483647) / 2147483647)(11);
+  const P = Array.from({ length: 60 }, () => ({ x: rnd() * w, y: rnd() * h, vx: (rnd() - .5) * .8, vy: (rnd() < .5 ? -1 : 1) * (.5 + rnd()), c: rnd() < .08 ? [200, 40, 40] : [30 + rnd() * 40, 30 + rnd() * 30, 30 + rnd() * 30] }));
+  const cars = [0, 1, 2].map(i => ({ x: rnd() * w, y: 30 + i * 70, v: (i % 2 ? -1 : 1) * 2.5, c: [230, 190, 40] }));
+  for (let z = 0; z < d; z++) {
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const i = ((z * h + y) * w + x) * 4, zebra = ((x + y * .6) / 16 | 0) % 2 === 0 && y > 50 && y < 170;
+      const v = zebra ? 228 : 168 + ((x * 7 + y * 3) % 7);
+      data[i] = v; data[i + 1] = v - 4; data[i + 2] = v - 10; data[i + 3] = 255;
+    }
+    const dot = (cx, cy, r, c, sx = 1) => { for (let y = Math.max(0, cy - r) | 0; y < Math.min(h, cy + r); y++) for (let x = Math.max(0, cx - r * sx) | 0; x < Math.min(w, cx + r * sx); x++) { const dx = (x - cx) / sx, dy = y - cy; if (dx * dx + dy * dy > r * r) continue; const i = ((z * h + y) * w + x) * 4; data[i] = c[0]; data[i + 1] = c[1]; data[i + 2] = c[2]; } };
+    for (const c of cars) { c.x = (c.x + c.v + w + 60) % (w + 60) - 30; dot(c.x, c.y, 8, c.c, 2.2); }
+    for (const p of P) { p.x = (p.x + p.vx + w) % w; p.y = (p.y + p.vy + h) % h; dot(p.x, p.y, 3.2, p.c); }
+  }
+  return { data, w, h, d };
+}
+
+let videoFile = null;
+async function buildFromVideo(f) {
+  const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = URL.createObjectURL(f);
+  await new Promise((res, rej) => { v.onloadeddata = res; v.onerror = () => rej(new Error('формат не читается')); });
+  const len = Math.min(v.duration || 10, 20), n = Math.min(260, Math.max(60, Math.round(len * 24)));
+  const k = 384 / Math.max(v.videoWidth, v.videoHeight);
+  const w = Math.round(v.videoWidth * k), h = Math.round(v.videoHeight * k);
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d', { willReadFrequently: true });
+  const data = new Uint8Array(w * h * n * 4);
+  const seek = t => new Promise(r => { const fn = () => { v.removeEventListener('seeked', fn); r(); }; v.addEventListener('seeked', fn); v.currentTime = t; });
+  for (let i = 0; i < n; i++) {
+    await seek(len * i / n); g.drawImage(v, 0, 0, w, h);
+    data.set(g.getImageData(0, 0, w, h).data, i * w * h * 4);
+    $('prog').firstChild.style.width = ((i + 1) / n * 100) + '%';
+  }
+  URL.revokeObjectURL(v.src); srcLen = len;
+  setVolume(data, w, h, n);
+  $('srcInfo').textContent = `${f.name} · ${len.toFixed(1)} с · ${n} кадров`;
+  setTimeout(() => $('prog').firstChild.style.width = '0', 700);
+}
+
+// ---------- camera ----------
+const controls = new OrbitControls(camera, cv);
+controls.enableDamping = true; controls.dampingFactor = 0.08; controls.rotateSpeed = 0.7; controls.zoomSpeed = 0.8;
+controls.minDistance = 0.05; controls.maxDistance = 12;
+let homeDist = 5;
+function setZoom(z) { const off = camera.position.clone().sub(controls.target); off.setLength(homeDist / z); camera.position.copy(controls.target).add(off); }
+function syncZoom() { const z = homeDist / camera.position.distanceTo(controls.target); $('zoom').value = z; $('zoomO').textContent = z.toFixed(2) + '×'; }
+function homeView() {
+  controls.target.set(0, 0, 0);
+  const rad = Math.hypot(hs.x, hs.y, hs.z);
+  const hf = Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
+  const r = rad / Math.sin(Math.min(hf, THREE.MathUtils.degToRad(camera.fov / 2))) * 1.02; homeDist = r;
+  camera.position.setFromSpherical(new THREE.Spherical(r, THREE.MathUtils.degToRad(62), THREE.MathUtils.degToRad(32)));
+  controls.update(); syncZoom();
+}
+$('zoom').addEventListener('input', e => { setZoom(+e.target.value); controls.update(); syncZoom(); });
+controls.addEventListener('change', () => { if (!take && !exporting) syncZoom(); });
+
+// ---------- drag the playhead ----------
+let dragging = false;
+const ndc = e => { const r = cv.getBoundingClientRect(); return new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); };
+function handleScreen() { const p = handle.position.clone().project(camera); const r = cv.getBoundingClientRect(); return { x: r.left + (p.x + 1) / 2 * r.width, y: r.top + (1 - p.y) / 2 * r.height, z: p.z }; }
+cv.addEventListener('pointerdown', e => {
+  const s = handleScreen();
+  if (Math.hypot(e.clientX - s.x, e.clientY - s.y) < 22 && s.z < 1) { dragging = true; controls.enabled = false; cv.setPointerCapture(e.pointerId); e.stopImmediatePropagation(); }
+}, { capture: true });
+cv.addEventListener('pointermove', e => {
+  if (!dragging) { const s = handleScreen(); cv.style.cursor = Math.hypot(e.clientX - s.x, e.clientY - s.y) < 22 ? 'grab' : 'default'; return; }
+  cv.style.cursor = 'grabbing';
+  // ближайшая точка оси времени (линия x=0,y=0) к лучу мыши
+  const ray = new THREE.Raycaster(); ray.setFromCamera(ndc(e), camera);
+  const o = ray.ray.origin, d = ray.ray.direction, A = new THREE.Vector3(0, 0, 0), u = new THREE.Vector3(0, 0, 1);
+  const w0 = o.clone().sub(A), a = d.dot(d), b = d.dot(u), c = u.dot(u), dd = d.dot(w0), ee = u.dot(w0), den = a * c - b * b;
+  if (Math.abs(den) < 1e-6) return;
+  const zt = (a * ee - b * dd) / den;
+  setCut((hs.z - zt) / (2 * hs.z));
+});
+const endDrag = () => { if (dragging) { dragging = false; controls.enabled = true; cv.style.cursor = 'grab'; } };
+cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', endDrag);
+
+// ---------- loop ----------
+let exporting = false;
+function frame(now) {
+  if (exporting) { requestAnimationFrame(frame); return; }
+  if (take) takeFrame(now); else controls.update();
+  renderer.render(scene, camera);
+  const s = handleScreen(), r = $('stage').getBoundingClientRect(), tc = $('tc');
+  tc.style.left = (s.x - r.left) + 'px'; tc.style.top = (s.y - r.top) + 'px';
+  const t = cut * srcLen; tc.textContent = `${String(Math.floor(t / 60)).padStart(2, '0')}:${(t % 60).toFixed(1).padStart(4, '0')}`;
+  requestAnimationFrame(frame);
+}
+
+// ---------- take: preset animation ----------
+const FPS = 30;
+let mode = 'orbit', take = null; // take = {start, sph, target}
+$('mOrbit').onclick = () => setMode('orbit'); $('mStatic').onclick = () => setMode('static');
+function setMode(m) { mode = m; $('mOrbit').className = m === 'orbit' ? 'on' : ''; $('mStatic').className = m === 'static' ? 'on' : '';
+  $('modeNote').textContent = m === 'orbit' ? 'Камера облетает куб от текущего ракурса, видео погружается до конца.' : 'Поставь ракурс мышью — камера замрёт, видео погрузится до конца.'; }
+function takeInit() { const off = camera.position.clone().sub(controls.target); return { sph: new THREE.Spherical().setFromVector3(off), target: controls.target.clone() }; }
+const ease = x => x * x * (3 - 2 * x);
+function takeApply(tk, t) { // t: 0..1
+  setCut(t * 0.995);
+  const sp = tk.sph.clone();
+  if (mode === 'orbit') { const k = ease(t); sp.theta += THREE.MathUtils.degToRad(-75) * k; sp.phi = Math.min(Math.PI * 0.49 + 0.6, sp.phi + THREE.MathUtils.degToRad(10) * Math.sin(Math.PI * k)); }
+  camera.position.setFromSpherical(sp).add(tk.target); camera.lookAt(tk.target);
+}
+function takeDur() { return Math.max(2, srcLen); }
+$('prevBtn').onclick = () => {
+  if (take) { take = null; controls.enabled = true; $('prevBtn').textContent = '▶ Превью'; return; }
+  take = { ...takeInit(), t0: performance.now() }; controls.enabled = false; $('prevBtn').textContent = '■ Стоп';
+};
+function takeFrame(now) {
+  const t = (now - take.t0) / 1000 / takeDur();
+  if (t >= 1) { takeApply(take, 1); const tk = take; take = null; controls.enabled = true; $('prevBtn').textContent = '▶ Превью';
+    camera.position.setFromSpherical(tk.sph).add(tk.target); controls.update(); return; }
+  takeApply(take, t);
+}
+$('recBtn').onclick = async () => {
+  if (!('VideoEncoder' in window)) { $('expInfo').textContent = 'Этот браузер не умеет писать MP4 — открой в Chrome.'; return; }
+  const b = $('recBtn'); b.disabled = true; take = null; controls.enabled = false;
+  const tk = takeInit(), cut0 = cut;
+  try {
+    const { Muxer, ArrayBufferTarget } = await import('./vendor/mp4-muxer.mjs');
+    const muxer = new Muxer({ target: new ArrayBufferTarget(), video: { codec: 'avc', width: OUT_W, height: OUT_H }, fastStart: 'in-memory' });
+    const enc = new VideoEncoder({ output: (c, m) => muxer.addVideoChunk(c, m), error: e => { $('expInfo').textContent = 'Ошибка: ' + e.message; } });
+    const cfg = { codec: 'avc1.640033', width: OUT_W, height: OUT_H, bitrate: 22e6, framerate: FPS };
+    if (!(await VideoEncoder.isConfigSupported(cfg)).supported) cfg.codec = 'avc1.4d0033';
+    enc.configure(cfg);
+    exporting = true; handle.visible = false; setRes(1);
+    const N = Math.round(takeDur() * FPS);
+    for (let i = 0; i < N; i++) {
+      takeApply(tk, i / (N - 1)); renderer.render(scene, camera);
+      const fr = new VideoFrame(cv, { timestamp: Math.round(i * 1e6 / FPS), duration: Math.round(1e6 / FPS) });
+      enc.encode(fr, { keyFrame: i % (FPS * 2) === 0 }); fr.close();
+      if (enc.encodeQueueSize > 6 || i % 8 === 0) { b.textContent = `Рендер ${Math.round(i / N * 100)}%`; await new Promise(r => setTimeout(r, 0)); }
+    }
+    await enc.flush(); muxer.finalize();
+    const blob = new Blob([muxer.target.buffer], { type: 'video/mp4' });
+    $('expInfo').textContent = `Готово: ${(N / FPS).toFixed(1)} с, ${(blob.size / 1048576).toFixed(1)} МБ.`;
+    await saveFile(`kub_vremeni_${mode}.mp4`, blob);
+  } catch (e) { $('expInfo').textContent = 'Ошибка: ' + e.message; }
+  exporting = false; handle.visible = true; setRes(PREVIEW); fit();
+  camera.position.setFromSpherical(tk.sph).add(tk.target); setCut(cut0); controls.enabled = true; controls.update();
+  b.disabled = false; b.textContent = 'Скачать MP4';
+};
+
+// ---------- upload ----------
+const drop = $('drop');
+drop.onclick = () => $('file').click();
+$('file').onchange = e => e.target.files[0] && load(e.target.files[0]);
+for (const el of [drop, $('stage')]) {
+  el.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('on'); });
+  el.addEventListener('dragleave', () => drop.classList.remove('on'));
+  el.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('on'); e.dataTransfer.files[0] && load(e.dataTransfer.files[0]); });
+}
+async function load(f) {
+  $('srcInfo').textContent = 'Раскладываю видео по кадрам…';
+  try { await buildFromVideo(f); } catch (e) { $('srcInfo').textContent = 'Не получилось: ' + e.message; }
+}
+
+// ---------- go ----------
+{ const v = demoVolume(); setVolume(v.data, v.w, v.h, v.d); srcLen = 8; }
+fit(); requestAnimationFrame(frame);
+// дефолтный футаж — Манхэттен с дрона
+(async () => {
+  try {
+    $('srcInfo').textContent = 'Загружаю дефолтный футаж…';
+    const r = await fetch('default.mp4'); if (!r.ok) throw new Error(r.status);
+    const f = new File([await r.blob()], 'Манхэттен (дефолт).mp4', { type: 'video/mp4' });
+    await buildFromVideo(f);
+  } catch (e) { $('srcInfo').textContent = 'Сейчас — демо-сцена.'; }
+})();
+window.__kub = { setCut, camera, controls, homeView };
+</script>
+<script src="../stats.js"></script>
+</body>
+</html>
