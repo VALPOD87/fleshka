@@ -308,6 +308,7 @@ var GUIDES=[
 ];
 /* Инструменты: url — страница генератора на этом сайте; превью в img/tools/<id>.mp4 и .jpg */
 var TOOLS=[
+ {id:"kub",title:"Куб времени",url:"kub/",isNew:true,hidden:true,desc:"Видео раскладывается в куб, где глубина — это время. Тянешь плейхед — ролик погружается внутрь и оставляет шлейф. Облёт камеры и экспорт.",out:"MP4",post:""},
  {id:"trafaret",title:"Генератор трафаретов",url:"trafaret/",isNew:true,desc:"Трафарет показывает, какой кусок видео проявить в другом стиле. Кляксы, мазки, рваная бумага, растекание до 10 секунд.",out:"PNG · MP4 · пак ZIP",post:"https://t.me/valpod87/1077"},
  {id:"tochki",title:"Облако точек",url:"tochki/",desc:"Картинка или видео превращается в облако точек: парение, разлёт, сборка, глитч-проходы, вращение камеры и трек-метки.",out:"MP4 · GIF",post:"https://t.me/valpod87/1066"}
 ];
@@ -340,6 +341,7 @@ var $=function(i){return document.getElementById(i)};
 var G=GUIDES.filter(function(g){return !g.hidden});
 
 /* вкладки */
+TOOLS=TOOLS.filter(function(t){return !t.hidden});
 var TABS=[["guides","Гайды",G.length],["tools","Инструменты",TOOLS.length],["skills","Скиллы",SKILLS.length],["links","Ссылки",LINKS.length]];
 $('tabs').innerHTML=TABS.map(function(t){return '<a class="tab" href="#'+t[0]+'" data-t="'+t[0]+'">'+t[1]+'<sup>'+t[2]+'</sup></a>'}).join('');
 function route(){var h=(location.hash||'#guides').slice(1);if(!$('p-'+h))h='guides';
