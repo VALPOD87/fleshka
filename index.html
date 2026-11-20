@@ -233,7 +233,7 @@ h3{font-family:Unbounded;font-weight:500;font-size:18px;line-height:1.3;color:#f
  </a></div>
 </div>
 
-<nav class="tabs"><div class="w"><div id="tabs" style="display:flex;gap:6px"></div><a class="os-pill" href="https://outsee.io/r/dhdszh" target="_blank" rel="noopener" data-it="кнопка во вкладках"><i>O</i><span>OUTSEE ↗</span></a></div></nav>
+<nav class="tabs"><div class="w"><div id="tabs" style="display:flex;gap:6px"></div><div style="display:flex;align-items:center;flex:none"><a class="os-pill" id="mykach" href="kachalka://open" style="display:none;margin-right:8px" data-it="моя Качалка"><i>↓</i><span>Качалка</span></a><a class="os-pill" href="https://outsee.io/r/dhdszh" target="_blank" rel="noopener" data-it="кнопка во вкладках"><i>O</i><span>OUTSEE ↗</span></a></div></div></nav>
 
 <div class="w">
  <section class="pane" id="p-guides">
@@ -242,7 +242,7 @@ h3{font-family:Unbounded;font-weight:500;font-size:18px;line-height:1.3;color:#f
  </section>
 
  <section class="pane" id="p-tools">
-  <p class="pl">Мои генераторы. Работают прямо в браузере: картинка или видео никуда не загружаются, результат скачивается сразу.</p>
+  <p class="pl">Мои генераторы и программы. Генераторы работают прямо в браузере: картинка или видео никуда не загружаются, результат скачивается сразу.</p>
   <div class="grid tools" id="tools-list"></div>
  </section>
 
@@ -308,6 +308,7 @@ var GUIDES=[
 ];
 /* Инструменты: url — страница генератора на этом сайте; превью в img/tools/<id>.mp4 и .jpg */
 var TOOLS=[
+ {id:"kachalka",title:"Качалка",url:"kachalka/",isNew:true,lv:"для Mac",desc:"Вставляешь ссылку с YouTube, Instagram, TikTok и ещё сотен сайтов — видео сразу падает в REF твоего проекта. Можно пачкой.",out:"MP4 · звук"},
  {id:"kub",title:"Куб времени",url:"kub/",isNew:true,desc:"Видео раскладывается в куб, где глубина — это время. Тянешь плейхед — ролик погружается внутрь и оставляет шлейф. Облёт камеры и экспорт.",out:"MP4",post:"https://t.me/valpod87/1087"},
  {id:"trafaret",title:"Генератор трафаретов",url:"trafaret/",isNew:true,desc:"Трафарет показывает, какой кусок видео проявить в другом стиле. Кляксы, мазки, рваная бумага, растекание до 10 секунд.",out:"PNG · MP4 · пак ZIP",post:"https://t.me/valpod87/1077"},
  {id:"tochki",title:"Облако точек",url:"tochki/",desc:"Картинка или видео превращается в облако точек: парение, разлёт, сборка, глитч-проходы, вращение камеры и трек-метки.",out:"MP4 · GIF",post:"https://t.me/valpod87/1066"}
@@ -344,6 +345,8 @@ var G=GUIDES.filter(function(g){return !g.hidden});
 
 /* вкладки */
 TOOLS=TOOLS.filter(function(t){return !t.hidden});
+/* кнопка «моя Качалка»: видна только на устройстве, где хоть раз открыли Флешку с ?me (выключить: ?notme) */
+try{var _q=location.search;if(/[?&]me\b/.test(_q))localStorage.setItem('fl_me','1');if(/[?&]notme\b/.test(_q))localStorage.removeItem('fl_me');if(localStorage.getItem('fl_me')==='1')document.getElementById('mykach').style.display='inline-flex'}catch(e){}
 var TABS=[["guides","Гайды",G.length],["tools","Инструменты",TOOLS.length],["skills","Скиллы",SKILLS.length],["links","Ссылки",LINKS.length]];
 $('tabs').innerHTML=TABS.map(function(t){return '<a class="tab" href="#'+t[0]+'" data-t="'+t[0]+'">'+t[1]+'<sup>'+t[2]+'</sup></a>'}).join('');
 function route(){var h=(location.hash||'#guides').slice(1);if(!$('p-'+h))h='guides';
@@ -401,7 +404,7 @@ $('vw').addEventListener('touchend',function(e){var d=e.changedTouches[0].client
 $('tools-list').innerHTML=TOOLS.map(function(t){
  return '<div class="card tool"><a class="tv" href="'+t.url+'" data-ev="link" data-it="Инструмент: '+esc(t.title)+'">'+(t.isNew?'<span class="new">новое</span>':'')+
   '<video src="img/tools/'+t.id+'.mp4" poster="img/tools/'+t.id+'.jpg" muted loop playsinline autoplay preload="metadata"></video></a>'+
-  '<div class="body"><div class="meta"><span class="tg lv">в браузере</span><span class="tg">'+esc(t.out)+'</span></div><h3>'+esc(t.title)+'</h3><p class="tdesc">'+esc(t.desc)+'</p>'+
+  '<div class="body"><div class="meta"><span class="tg lv">'+esc(t.lv||'в браузере')+'</span><span class="tg">'+esc(t.out)+'</span></div><h3>'+esc(t.title)+'</h3><p class="tdesc">'+esc(t.desc)+'</p>'+
   '<div class="btns"><a class="btn p" href="'+t.url+'" data-ev="link" data-it="Инструмент: '+esc(t.title)+'">Открыть ↗</a>'+
   (t.post?'<a class="btn s" href="'+t.post+'" target="_blank" rel="noopener" data-ev="post" data-it="'+esc(t.title)+'">'+TG+'Пост</a>':'')+'</div></div></div>'}).join('');
 /* видео-превью крутятся только когда видны */

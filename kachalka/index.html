@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Качалка VALPOD · Флешка</title>
+<meta name="description" content="Бесплатная программа для Mac: качает видео с YouTube, Instagram, TikTok, Vimeo, Pinterest, X и VK прямо в папку проекта">
+<meta property="og:title" content="Качалка VALPOD">
+<meta property="og:description" content="Качает видео с YouTube, Instagram, TikTok и ещё сотен сайтов прямо в папку проекта. Бесплатно, для Mac">
+<meta property="og:image" content="https://valpod87.github.io/fleshka/img/tools/kachalka.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--c:#31F1FC;--t:#E8F4F5;--d:#9FB3B5;--m:#6E8A8D;--b:rgba(255,255,255,.1);--card:rgba(255,255,255,.03)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000}
+body{background:radial-gradient(110% 40% at 50% 105%,#0B2F55 0%,#061527 40%,transparent 75%),linear-gradient(165deg,#0A1A1E 0%,#030506 40%,#000 100%);background-attachment:fixed;color:var(--t);font-family:Inter,Arial,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.w{max-width:760px;margin:0 auto;padding:28px 20px 80px}
+.back{font-family:'JetBrains Mono';font-size:12px;color:var(--m)}
+.back:hover{color:var(--c)}
+h1{font-family:Unbounded;font-weight:800;font-size:clamp(28px,6vw,44px);line-height:1.1;margin:26px 0 12px}
+h1 span{color:var(--c)}
+.lead{color:var(--d);font-size:17px;max-width:620px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 26px}
+.tg{font-family:'JetBrains Mono';font-size:11px;color:var(--d);border:1px solid var(--b);border-radius:999px;padding:4px 10px}
+.tg.c{color:var(--c);border-color:rgba(49,241,252,.45)}
+.pv{border:1px solid var(--b);border-radius:18px;overflow:hidden;background:#000;aspect-ratio:4/3}
+.pv video{width:100%;height:100%;object-fit:cover;display:block}
+h2{font-family:Unbounded;font-weight:500;font-size:20px;margin:44px 0 14px}
+.card{background:var(--card);border:1px solid var(--b);border-radius:18px;padding:22px}
+.card+.card{margin-top:12px}
+.card b{font-family:Unbounded;font-weight:500;font-size:15px;display:block;margin-bottom:6px}
+.card p{color:var(--d);font-size:14.5px}
+.card .pick{font-family:'JetBrains Mono';font-size:11px;color:var(--c);margin-bottom:8px;display:block}
+.cmd{display:flex;gap:8px;align-items:stretch;margin:14px 0 4px}
+.cmd code{flex:1;font-family:'JetBrains Mono';font-size:12.5px;background:#05090b;border:1px solid var(--b);border-radius:12px;padding:13px 14px;overflow-x:auto;white-space:nowrap;color:var(--t)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;font-weight:600;font-size:14px;border:1px solid var(--b);white-space:nowrap}
+.btn.p{background:var(--c);border-color:var(--c);color:#041014}
+.btn.s:hover{border-color:var(--c);color:var(--c)}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+ol{padding-left:20px;color:var(--d);font-size:14.5px}
+ol li{margin:7px 0}
+.card ol li b,ol li b{color:var(--t);font-family:Inter;font-weight:600;font-size:14.5px;display:inline;margin:0}
+kbd{font-family:'JetBrains Mono';font-size:12px;border:1px solid var(--b);border-radius:6px;padding:1px 6px;color:var(--t)}
+ul.f{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+ul.f li{background:var(--card);border:1px solid var(--b);border-radius:14px;padding:14px 16px;color:var(--d);font-size:14px}
+ul.f li i{font-style:normal;color:var(--t);font-weight:600;display:block;margin-bottom:2px}
+.note{color:var(--m);font-size:13px;margin-top:10px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--c);color:#041014;font-weight:600;font-size:14px;padding:10px 16px;border-radius:12px;transition:.2s;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@media (max-width:600px){ul.f{grid-template-columns:1fr}.cmd{flex-direction:column}.cmd .btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="w">
+<a class="back" href="../#tools">← Флешка</a>
+<h1>Качалка <span>VALPOD</span></h1>
+<p class="lead">Вставляешь ссылку на видео, выбираешь папку проекта, жмёшь «Скачать». Файл сразу в REF, готовый для монтажа.</p>
+<div class="tags"><span class="tg c">для Mac</span><span class="tg">бесплатно</span><span class="tg">YouTube · Instagram · TikTok · Vimeo · Pinterest · X · VK</span></div>
+<div class="pv"><video src="../img/tools/kachalka.mp4" poster="../img/tools/kachalka.jpg" muted loop playsinline autoplay></video></div>
+
+<h2>Что умеет</h2>
+<ul class="f">
+<li><i>Сразу в проект</i>Сама находит папки проектов на Рабочем столе и кладёт видео в их REF</li>
+<li><i>Пачкой</i>Несколько ссылок за раз, каждая с новой строки</li>
+<li><i>Для монтажа</i>H.264 + AAC в mp4 открывается в Premiere без перекодирования. Есть «Максимум», 1080p и «Только звук»</li>
+<li><i>Закрытые аккаунты</i>Instagram и TikTok качает через твой вход в браузере</li>
+</ul>
+
+<h2>Как поставить</h2>
+<div class="card">
+<span class="pick">способ 1 · рекомендую</span>
+<b>Одной строкой в Терминале</b>
+<p>Открой Терминал (<kbd>⌘</kbd> + <kbd>Пробел</kbd>, набери «Терминал»), вставь строку и нажми <kbd>Enter</kbd>. Так macOS не ругается на неизвестного разработчика.</p>
+<div class="cmd"><code id="one">curl -fsSL https://valpod87.github.io/fleshka/kachalka/install.sh | bash</code><button class="btn p" id="cp" data-ev="copy" data-it="Качалка: команда">Скопировать</button></div>
+</div>
+<div class="card">
+<span class="pick">способ 2</span>
+<b>Скачать архив</b>
+<ol>
+<li>Скачай архив и распакуй двойным кликом.</li>
+<li>Перетащи «Качалка VALPOD» в папку «Программы».</li>
+<li>Первый запуск: <b>правый клик → «Открыть» → «Открыть»</b>. Если macOS всё равно не пускает: «Системные настройки» → «Конфиденциальность и безопасность» → внизу «Всё равно открыть».</li>
+</ol>
+<div class="btns"><a class="btn s" href="Kachalka-VALPOD.zip" download data-ev="zip" data-it="Качалка VALPOD">↓ Скачать ZIP · 0,3 МБ</a></div>
+</div>
+
+<h2>Первый запуск</h2>
+<ol>
+<li>Откроется Терминал и сам поставит загрузчик (yt-dlp), ffmpeg и движок для YouTube. Это 1–3 минуты и нужно один раз. Homebrew не нужен.</li>
+<li>macOS спросит доступ к «Рабочему столу». Разреши: так Качалка находит папки проектов.</li>
+<li>Когда всё встанет, Качалка откроется в браузере. Иконку можно добавить в Dock.</li>
+<li>Для Instagram выбери в «Вход в аккаунты» браузер, где ты залогинен. macOS спросит пароль от связки ключей, нажми «Разрешать всегда».</li>
+</ol>
+<p class="note">Если папок с REF на Рабочем столе нет, видео ляжет в «Загрузки / Качалка VALPOD». Нужна macOS 11 или новее. Качалка работает только у тебя на Маке, ничего никуда не отправляет и сама выключается после 3 часов простоя.</p>
+<div class="btns"><a class="btn s" href="kachalka://open" data-ev="link" data-it="Качалка: открыть">Уже стоит? Открыть Качалку ↗</a></div>
+
+<h2>Что-то не работает</h2>
+<p class="lead" style="font-size:15px">Сделай скриншот и напиши мне в Telegram <a href="https://t.me/valpod" target="_blank" rel="noopener" style="color:var(--c)">@valpod</a>. Сайты время от времени ломают загрузчики, а Качалка раз в день обновляет yt-dlp сама.</p>
+</div>
+<div class="toast" id="toast">Скопировано</div>
+<script>
+document.getElementById('cp').onclick=function(){var t=document.getElementById('one').textContent,d=function(){var e=document.getElementById('toast');e.classList.add('on');setTimeout(function(){e.classList.remove('on')},1800)};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(d,function(){f()});else f();
+ function f(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');d()}catch(e){}a.remove()}};
+</script>
+<script src="../stats.js" defer></script>
+</body>
+</html>
